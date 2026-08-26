@@ -11,3 +11,4 @@ renv/sandbox/
 renv/staging/
 *.html
 .DS_Store
+*_files/

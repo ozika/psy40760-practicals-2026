@@ -1,0 +1,116 @@
+---
+title: "Estimation, Probability & Inference"
+subtitle: "A revision — PSY40760, Week 2"
+author: "Ondrej Zika"
+format:
+  revealjs:
+    theme: simple
+    slide-number: true
+    transition: fade
+    incremental: false
+---
+
+## Before we start
+
+This is **revision**. Most of you have met these ideas before — the goal today is a shared foundation before six weeks of hands-on stats.
+
+By the end of this block you should be able to say, in plain English:
+
+- what a *population* and a *sample* are, and why the distinction matters
+- what *inference* means
+- the difference between a *probability* question and a *statistics* question
+- why we're using R for this
+
+## Why statistics, at all?
+
+Psychological data is **noisy**:
+
+- individual differences
+- measurement error
+- sampling variability
+
+> Statistics is how we separate *signal* from that noise.
+
+Without it, "the treatment group scored higher" tells you almost nothing — higher by how much, and could that just be noise?
+
+## Population vs. sample
+
+- **Population** — everyone/everything you actually care about
+- **Sample** — the (much smaller) group you actually measured
+
+We almost never measure the whole population.
+
+<br>
+
+::: {.fragment}
+**So what do we do instead?** We measure a sample, and *infer* something about the population.
+:::
+
+## What does "inference" mean?
+
+> Reasoning from a sample back to the population it came from.
+
+Three things worth saying explicitly:
+
+1. It relies on **assumptions** about how the sample relates to the population
+2. It always comes with **uncertainty** — never certainty
+3. The goal is to *quantify* that uncertainty, not pretend it isn't there
+
+## Two directions of the same problem
+
+::: {.columns}
+::: {.column width="50%"}
+**Probability**
+
+*Given a known process, what data might we see?*
+
+- fair coin, 10 flips → how many heads?
+- fair die → chance of rolling a 6?
+:::
+::: {.column width="50%"}
+**Statistics**
+
+*Given data, what process produced it?*
+
+- 10 heads in a row → is this coin even fair?
+- suspicious card draw → was the deck shuffled?
+:::
+:::
+
+<br>
+
+Same examples, opposite direction. That reversal *is* statistics.
+
+## Frequentist reasoning
+
+One way to define probability: **long-run frequency**.
+
+- Flip a coin once — meaningless
+- Flip it 10 times — some noise
+- Flip it 10,000 times — the proportion of heads settles down
+
+::: {.fragment}
+**Let's actually do this in R** — live coin-flip simulation, watch the running proportion converge as `n` grows. (Switch to RStudio.)
+:::
+
+## One honest caveat
+
+Frequentist reasoning is our starting lens for this module — but it isn't the only one.
+
+- **Bayesian inference** — probability as *degree of belief*, updated by data
+- **Machine learning approaches** — frame the problem differently again
+
+We won't cover these in depth this term. If you want to go further afterward, *Statistical Rethinking* (McElreath) is a good next step — it's on the optional reading list.
+
+## Why R, specifically?
+
+- **Reproducible** — your analysis is a script, not a trail of menu-clicks nobody can retrace
+- **Transparent** — a marker, a collaborator, or future-you can see exactly what you did
+- **Free and open** — no license, runs anywhere
+- Directly contrast: point-and-click tools (e.g. SPSS) hide the steps; a script *is* the steps
+
+## Coming up
+
+- **Now:** switch to RStudio, open `week02_practical.Rmd`
+- Today's practical: RStudio orientation, R as a calculator, vectors, logical operators, data frames, **importing your own data properly**
+- Next week (Week 4): confidence intervals & effect sizes, and the tidyverse
