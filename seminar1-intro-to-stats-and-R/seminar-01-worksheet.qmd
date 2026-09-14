@@ -1,0 +1,591 @@
+---
+title: "Seminar 1 — Introduction to R"
+subtitle: "PSY40760 Advanced Data Analysis and Statistics in R"
+date: 2026-09-18
+format:
+  html:
+    toc: true
+    number-sections: false
+---
+
+# Worksheet 1
+
+## Welcome
+
+This is the worksheet for our first session together. It provides you with background reading and a to-do list of items to complete before Friday, then guides you through the content of the practical.
+
+## Session at a glance
+
+| | |
+|---|---|
+| **Workshop Date** | Friday 18 September 2026 |
+| **Due Date** | Sunday 27 September 2026, 23:59 |
+| **Time** | 14:00 – 16:50 (170 min) |
+| **Room** | QUI-013 |
+| **Staff** | Dr Ondrej Zika, Cameron McCabe |
+| **Theory** | Estimation, probability & inference |
+| **Practical** | R/RStudio basics |
+
+## Before you arrive: three things to do
+
+### 1. Install R, RStudio, Quarto and renv
+
+Follow the **Technical Setup Guide** (posted in the General Setup section on Brightspace). You need:
+
+- R (most recent version)
+- RStudio Desktop
+- the `renv` package (`install.packages("renv")`)
+- Quarto (recent RStudio versions already bundle it — check with `quarto::quarto_version()` before installing separately)
+
+Budget 30–45 minutes. Git/GitHub setup is optional (useful, not required) — see the guide's voluntary section.
+
+**If you get stuck:** post on the PSY40780 (the research project module) module forum and tag Ondrej or Cameron.
+
+### 2. Register on DataCamp
+
+Register using this link: <https://www.datacamp.com/groups/shared_links/dc97bf6128becabfdf1ceee81a08f934d23c11ad2de1c9fecf5487151c1c5c87>
+
+- **Use your UCD/UCDConnect email address.**
+- **Do not start any assignments prior to the session start.**
+
+### 3. Reading
+
+| | |
+|---|---|
+| **Theory** | *Statistical Thinking for the 21st Century* (Poldrack) — [Ch. 1, Introduction](https://statsthinking21.github.io/statsthinking21-core-site/introduction.html) & [Ch. 2, Working with Data](https://statsthinking21.github.io/statsthinking21-core-site/working-with-data.html) |
+| **Practical** | *Modern Statistics with R* (Navarro & Foxcroft) — [Ch. 1, Introduction](https://www.modernstatisticswithr.com/introduction.html) & [Ch. 2.1–2.5](https://www.modernstatisticswithr.com/thebasics.html#installation) (Installing R and RStudio → Packages) |
+
+Both textbooks are free online and will be used throughout the module — worth bookmarking now.
+
+## Today's session
+
+**Theory:** a revision of estimation, probability & inference — population vs. sample, what "inference" means, probability vs. statistics as two directions of the same problem, frequentist reasoning, and why R specifically.
+
+**Practical:** by the end you should be able to navigate RStudio, do basic arithmetic and use functions, assign variables, create and subset vectors, use logical operators to filter data, explore a data frame, and import a `.csv` file (including diagnosing why an import has failed).
+
+The session runs in three parts: a **joint walkthrough** (Part 1), where we code together as a group; **independent DataCamp work** (Part 2); and a set of **in-notebook exercises** (Part 3).
+
+## Assessment
+
+**Deadline for completion:** Sunday 27th September, 23:59.
+
+1. Complete the mandatory assigned module on DataCamp ("Introduction to R").
+2. Submit Worksheet 1 as a fully runnable `.qmd` file with completed exercises.
+3. Optional: create a GitHub repository and push your code there; include a link and reproduction instructions (please still submit the `.qmd` file on Brightspace).
+
+Name the file using your Student Number and surname as prefix, e.g. `2332334_Smith_worksheet_01.qmd`
+
+Assignments 1 and 2 are mandatory and constitute 3% of your grade (pass/fail). Assignment 3 is optional and voluntary.
+
+---
+
+## Part 1: Joint walkthrough
+
+We will work through this section together as a group. Follow along in RStudio — run each chunk as we go and make sure you understand the output before moving on.
+
+### 1.1 The RStudio environment
+
+When you open RStudio you will see (at least) three panes:
+
+- **Console** (bottom-left): where R executes commands. The `>` prompt means R is ready for input.
+- **Environment** (top-right): shows every object you have created this session.
+- **Files / Plots / Help** (bottom-right): file browser, plot viewer, and help pages.
+
+When working with a `.qmd` or `.R` script (top-left pane), you write code there and send it to the console with **Ctrl+Enter** (Windows/Linux) or **Cmd+Enter** (Mac).
+
+### 1.2 R as a calculator
+
+The most basic use of R is arithmetic. Run the chunk below and observe the output carefully.
+
+```{r}
+2 + 2
+10 - 3
+4 * 5
+10 / 3
+2 ^ 6
+```
+
+The `[1]` before each result is an *index* — R's way of telling you this is the first element of the output. When a result spans many lines, R prints the index at the start of each row so you can count where you are:
+
+```{r}
+1:30
+```
+
+Operator precedence follows the usual mathematical rules (brackets, then exponents, then multiplication/division, then addition/subtraction):
+
+```{r}
+2 + 3 * 4       # 14, not 20
+(2 + 3) * 4     # 20
+```
+
+Spaces don't matter for most operations — `2+2` and `2 + 2` are identical. The exception is if you add a space *inside* a number: `6 8` is two separate numbers with no operator, which is an error.
+
+**Try it:** Use R to calculate 2 to the power of 10. What does dividing a number by zero give you?
+
+```{r}
+# your code here
+```
+
+### 1.3 Functions
+
+Functions take input, do something, and return output. The input goes inside the brackets.
+
+```{r}
+sqrt(144)
+round(3.14159, 2)
+log(10)
+abs(-7)
+```
+
+Functions can be nested — the inner one is evaluated first:
+
+```{r}
+sqrt(log(10))
+```
+
+When a function takes more than one argument you can pass them by position or by name. Both lines below do the same thing:
+
+```{r}
+round(3.14159, 2)
+round(x = 3.14159, digits = 2)
+```
+
+To see what arguments a function accepts, run `?round` or `help(round)` in the console.
+
+### 1.4 Variables
+
+Variables store values so you can reuse them. Use `<-` to assign (read it as "gets"):
+
+```{r}
+a <- 4
+b <- 5
+a + b
+a * b
+```
+
+Notice that `a` and `b` now appear in your **Environment** pane. Variables remain there until you overwrite or remove them. Variables are case-sensitive: `a` and `A` are different objects.
+
+You can assign the result of any expression to a variable:
+
+```{r}
+n_sessions <- 6 * 3
+n_sessions
+```
+
+Naming convention: all lower-case with underscores (`reaction_time`, not `ReactionTime`). Names must start with a letter and cannot contain spaces or `?`.
+
+### 1.5 Vectors
+
+We rarely work with single numbers. A **vector** stores multiple values of the same type in a fixed order.
+
+```{r}
+scores <- c(72, 85, 91, 68, 79, 88)
+scores
+```
+
+Other ways to create vectors:
+
+```{r}
+1:10                        # integers 1 to 10
+seq(0, 1, by = 0.25)        # sequence with a fixed step
+rep("control", 4)           # repeat a value n times
+```
+
+### 1.6 Functions on vectors
+
+Functions applied to a vector work on all elements at once.
+
+```{r}
+length(scores)
+mean(scores)
+sd(scores)
+sum(scores)
+```
+
+Arithmetic between a vector and a single number operates element-wise:
+
+```{r}
+scores * 2
+scores - mean(scores)   # centre the scores
+```
+
+Arithmetic between two vectors of the same length also operates element-wise:
+
+```{r}
+time1 <- c(5.2, 4.8, 6.1)
+time2 <- c(4.9, 4.7, 5.8)
+time1 - time2
+```
+
+### 1.7 Subsetting vectors
+
+Use square brackets `[ ]` to extract elements by position:
+
+```{r}
+scores[1]           # first element
+scores[2:4]         # elements 2, 3, 4
+scores[c(1, 5)]     # elements 1 and 5
+scores[-1]          # everything except the first element
+```
+
+A logical test applied to a vector returns `TRUE` or `FALSE` for each element:
+
+```{r}
+scores > 80
+```
+
+Use that result to subset — only elements where the condition is `TRUE` are returned:
+
+```{r}
+scores[scores > 80]
+```
+
+### 1.8 Character and logical vectors
+
+Vectors can hold text (character type) or logical values (`TRUE`/`FALSE`):
+
+```{r}
+conditions <- c("control", "treatment", "control", "treatment", "control", "treatment")
+class(conditions)
+class(scores)
+```
+
+Key logical operators: `==` (equal), `!=` (not equal), `>`, `<`, `>=`, `<=`, `&` (AND), `|` (OR), `!` (NOT). Note: always use double `==` for equality tests; a single `=` means something else.
+
+```{r}
+conditions == "control"
+conditions != "control"
+```
+
+Combine conditions with `&` or `|`:
+
+```{r}
+scores > 80 & conditions == "control"
+scores[scores > 80 & conditions == "control"]
+```
+
+You can store a logical result as a variable, which is useful when the condition is complex:
+
+```{r}
+is_high_control <- scores > 80 & conditions == "control"
+scores[is_high_control]
+```
+
+### 1.9 Data frames
+
+A **data frame** is a table: rows are observations, columns are variables. Unlike vectors, different columns can hold different types. R includes several built-in data frames — we will use `trees`, which records the girth, height, and volume of 31 cherry trees.
+
+```{r}
+head(trees)       # first 6 rows
+tail(trees)       # last 6 rows
+str(trees)        # structure: column names, types, sample values
+summary(trees)    # descriptive statistics for each column
+```
+
+Access a single column with `$`:
+
+```{r}
+trees$Height
+mean(trees$Height)
+```
+
+Subset rows with a logical condition. Note the comma — it separates row selection from column selection; leaving column selection blank means "keep all columns":
+
+```{r}
+trees[trees$Height > 75, ]
+```
+
+Combine conditions to filter on multiple variables:
+
+```{r}
+trees[trees$Height > 75 & trees$Volume > 30, ]
+```
+
+Add a new column by assigning to `dataset$new_column`:
+
+```{r}
+trees$Girth_cm <- trees$Girth * 2.54   # convert from inches to cm
+head(trees)
+```
+
+---
+
+## Part 2: DataCamp
+
+Complete the **"Introduction to R"** assignment on DataCamp. This covers the same material as Part 1, at your own pace with immediate feedback — it counts towards your grade (see Assessment above).
+
+---
+
+## Part 3: Exercises in RStudio
+
+These exercises are meant to be completed independently, in this notebook. Write your code in the chunks provided and check the result before moving on.
+
+Exercises 1–10 are a warm-up. Exercises 11–25 build further. All 25 are mandatory.
+
+### Warm-up (1–10)
+
+### Exercise 1 — R as a calculator
+
+A study runs for 6 weeks, with 3 sessions per week. Use R to calculate the total number of sessions.
+
+```{r}
+# your code here
+```
+
+### Exercise 2 — Assigning variables
+
+Assign the width and height of a rectangle (in cm) to two variables, then use them to calculate its area.
+
+```{r}
+width <- 10   # cm — change to your own value
+height <- 5   # cm — change to your own value
+
+```
+
+### Exercise 3 — Using functions
+
+Use a built-in function to calculate the square root of 144, and another to round `7.836` to one decimal place.
+
+```{r}
+# your code here
+```
+
+### Exercise 4 — Creating a vector
+
+Create a vector called `reaction_times` containing these five reaction times (in ms): 412, 398, 405, 430, 389.
+
+```{r}
+# your code here
+```
+
+### Exercise 5 — Indexing a vector
+
+Using `reaction_times` from Exercise 4, extract the 3rd value, and then the first two values.
+
+```{r}
+# your code here
+```
+
+### Exercise 6 — Vector arithmetic
+
+Convert all values in `reaction_times` from milliseconds to seconds (divide by 1000) in one line.
+
+```{r}
+# your code here
+```
+
+### Exercise 7 — Logical operators & filtering
+
+Using `reaction_times`, create a logical vector showing which values are greater than 400, then use it to extract only those values.
+
+```{r}
+# your code here
+```
+
+### Exercise 8 — Exploring a data frame
+
+R comes with a built-in data frame called `trees`. Use `str()`, `head()`, and `summary()` to explore it. What does each function tell you?
+
+```{r}
+# your code here
+```
+
+### Exercise 9 — Subsetting a data frame
+
+From `trees`, extract just the `Height` column using `$`, then extract only the rows where `Height` is greater than 75.
+
+```{r}
+# your code here
+```
+
+### Exercise 10 — Troubleshooting data import
+
+The code below is meant to import a file called `my_data.csv` but fails. Without running it, identify what's likely wrong, then fix it and explain your reasoning in a comment.
+
+```{r}
+#| eval: false
+data <- read.csv("Desktop/my_data.csv")
+```
+
+*Hint: think about what "working directory" means, and where RStudio is actually looking for that file.*
+
+### Building up (11–25)
+
+### Exercise 11 — Vectors with `seq()` and `rep()`
+
+Create a vector of the session weeks for this module (2, 4, 6, 10, 11, 12) using `c()`, then a vector counting from 1 to 12 using `seq()`, and a vector that repeats `"pass"` 5 times using `rep()`.
+
+```{r}
+# your code here
+```
+
+### Exercise 12 — Vector arithmetic between two vectors
+
+`time1 <- c(5.2, 4.8, 6.1, 5.5)` and `time2 <- c(4.9, 4.7, 5.8, 5.0)` are a participant's times (seconds) on attempt 1 and attempt 2 of the same task. Calculate the improvement (`time1 - time2`) for each attempt, and the mean improvement.
+
+```{r}
+time1 <- c(5.2, 4.8, 6.1, 5.5)
+time2 <- c(4.9, 4.7, 5.8, 5.0)
+
+```
+
+### Exercise 13 — Named vectors
+
+Create a named vector giving the room for each session: Week 2 = "QUI-013", Week 4 = "L249-SUTH", Week 6 = "QUI-013". Use the name (not the position) to look up Week 4's room.
+
+```{r}
+# your code here
+```
+
+### Exercise 14 — Combining logical conditions
+
+Using `reaction_times` from Exercise 4, extract the values that are greater than 395 **and** less than 420.
+
+```{r}
+# your code here
+```
+
+### Exercise 15 — `ifelse()` for recoding
+
+Using `reaction_times`, create a new vector `speed_label` that says `"fast"` where the time is below 400 ms and `"slow"` otherwise, using `ifelse()`.
+
+```{r}
+# your code here
+```
+
+### Exercise 16 — Sorting and ordering
+
+Sort `reaction_times` from fastest to slowest using `sort()`. Then use `order()` to get the *positions* that would produce the same ordering. Verify the two approaches give consistent results.
+
+```{r}
+# your code here
+```
+
+### Exercise 17 — `which()`
+
+Using `reaction_times`, use `which()` to find the *position* of the slowest trial, then use that position to extract the value itself.
+
+```{r}
+# your code here
+```
+
+### Exercise 18 — Building a data frame from vectors
+
+Create a data frame called `participants` with three columns: `id` (1 to 5), `age` (five plausible ages), and `group` (a mix of `"control"` and `"treatment"`).
+
+```{r}
+# your code here
+```
+
+### Exercise 19 — Adding a computed column
+
+Using `participants` from Exercise 18, add a new column `age_months` that converts `age` to months.
+
+```{r}
+# your code here
+```
+
+### Exercise 20 — Multi-condition subsetting
+
+From `trees`, extract the rows where `Height > 75` **and** `Volume > 40`.
+
+```{r}
+# your code here
+```
+
+### Exercise 21 — Grouped summary with `tapply()`
+
+Using `participants` from Exercise 18, use `tapply()` to calculate the mean `age` separately for each `group`.
+
+```{r}
+# your code here
+```
+
+### Exercise 22 — A first matrix
+
+Create a 3×3 matrix of the numbers 1–9 using `matrix()`, filled by row. Extract the element in row 2, column 3, and then the whole second row.
+
+```{r}
+# your code here
+```
+
+### Exercise 23 — A first list
+
+Create a list called `my_analysis` with three elements: a character string with your name, the `reaction_times` vector, and the `participants` data frame. Access each element by name using `$`.
+
+```{r}
+# your code here
+```
+
+### Exercise 24 — Reading a `str()` output
+
+Run `str(trees)` and write a comment above your code describing what each line of the output tells you (type, dimensions, sample values).
+
+```{r}
+# your code here
+```
+
+### Exercise 25 — Putting it together
+
+Using `trees`: (1) add a new column `Height_m` converting `Height` from feet to metres (1 ft = 0.3048 m), (2) filter to trees with `Height_m` above the median, (3) report how many trees remain.
+
+```{r}
+# your code here
+```
+
+---
+
+## Challenge exercises (optional — for the keen)
+
+These go beyond what has been explicitly covered. Have a go if you finish early, or come back to them later in the term.
+
+### Challenge 1 — Simulating coin flips
+
+Use `sample(c("H", "T"), size = 100, replace = TRUE)` to simulate 100 coin flips. Calculate the proportion of heads. Then repeat with 10, 1000, and 10 000 flips — what do you notice about how the proportion behaves as the number of flips grows? (This is the frequentist idea from today's lecture, in code.)
+
+```{r}
+# your code here
+```
+
+### Challenge 2 — Writing your own function
+
+Write a function `celsius_to_fahrenheit(c)` that converts a temperature in Celsius to Fahrenheit (`F = C * 9/5 + 32`). Test it on a vector of several temperatures at once.
+
+```{r}
+celsius_to_fahrenheit <- function(c) {
+
+}
+```
+
+### Challenge 3 — Implementing the mean and SD by hand
+
+Without using `mean()` or `sd()`, calculate the mean and standard deviation of `reaction_times` using only `sum()`, `length()`, and arithmetic. Check your answers match the built-in functions.
+
+```{r}
+# your code here
+```
+
+### Challenge 4 — Debugging a broken script
+
+The script below is meant to calculate the mean height of trees taller than 70 feet, but contains three separate bugs. Find and fix all of them (write the corrected version below the buggy code).
+
+```{r}
+#| eval: false
+Trees_data <- trees
+tall_trees <- trees_data[trees_data$Height > 70]
+mean_height <- mean(tall_trees$Height))
+```
+
+```{r}
+# corrected version here
+```
+
+### Challenge 5 — A small end-to-end analysis
+
+Using the built-in `airquality` dataset: (1) find how many rows have a missing (`NA`) `Ozone` value, (2) remove those rows, (3) calculate the mean `Temp` separately for each `Month`, (4) identify which month had the highest mean temperature. Do this in one connected block, storing intermediate results in clearly named variables.
+
+```{r}
+# your code here
+```
+
+
