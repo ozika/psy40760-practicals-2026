@@ -29,21 +29,4 @@ git pull
 
 from inside the project folder. If `renv.lock` has changed (i.e. new packages were added for that week), run `renv::restore()` again afterwards.
 
-## Structure
 
-```
-psy40760-practicals-2026/
-├── psy40760-practicals-2026.Rproj   <- open this first
-├── renv.lock                          <- exact package versions for the course
-└── weeks/
-    ├── week02-r-basics/
-    │   ├── week02_practical.Rmd       <- work through this in the practical
-    │   └── data/
-    └── ...                             <- added week by week
-```
-
-Each week folder contains the student notebook and any data files it needs. Solutions notebooks (`*_SOLUTIONS.Rmd`) are for instructor/TA use.
-
-## Problems?
-
-Bring it to the practical session — Cameron is there to help. If it's a "my R won't even open the project" problem, check the General Setup section on Brightspace first.
