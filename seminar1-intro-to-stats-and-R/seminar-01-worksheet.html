@@ -1,0 +1,1031 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-0.9.629">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2026-09-18">
+
+<title>Seminar 1 — Introduction to R</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<script src="seminar-01-worksheet_files/libs/clipboard/clipboard.min.js"></script>
+<script src="seminar-01-worksheet_files/libs/quarto-html/quarto.js"></script>
+<script src="seminar-01-worksheet_files/libs/quarto-html/popper.min.js"></script>
+<script src="seminar-01-worksheet_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="seminar-01-worksheet_files/libs/quarto-html/anchor.min.js"></script>
+<link href="seminar-01-worksheet_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="seminar-01-worksheet_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="seminar-01-worksheet_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="seminar-01-worksheet_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="seminar-01-worksheet_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet">
+
+
+</head>
+
+<body>
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+  <nav id="TOC" role="doc-toc">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#worksheet-1" id="toc-worksheet-1" class="nav-link active" data-scroll-target="#worksheet-1">Worksheet 1</a>
+  <ul class="collapse">
+  <li><a href="#welcome" id="toc-welcome" class="nav-link" data-scroll-target="#welcome">Welcome</a></li>
+  <li><a href="#session-at-a-glance" id="toc-session-at-a-glance" class="nav-link" data-scroll-target="#session-at-a-glance">Session at a glance</a></li>
+  <li><a href="#before-you-arrive-three-things-to-do" id="toc-before-you-arrive-three-things-to-do" class="nav-link" data-scroll-target="#before-you-arrive-three-things-to-do">Before you arrive: three things to do</a>
+  <ul class="collapse">
+  <li><a href="#install-r-rstudio-quarto-and-renv" id="toc-install-r-rstudio-quarto-and-renv" class="nav-link" data-scroll-target="#install-r-rstudio-quarto-and-renv">1. Install R, RStudio, Quarto and renv</a></li>
+  <li><a href="#register-on-datacamp" id="toc-register-on-datacamp" class="nav-link" data-scroll-target="#register-on-datacamp">2. Register on DataCamp</a></li>
+  <li><a href="#reading" id="toc-reading" class="nav-link" data-scroll-target="#reading">3. Reading</a></li>
+  </ul></li>
+  <li><a href="#todays-session" id="toc-todays-session" class="nav-link" data-scroll-target="#todays-session">Today’s session</a></li>
+  <li><a href="#assessment" id="toc-assessment" class="nav-link" data-scroll-target="#assessment">Assessment</a></li>
+  <li><a href="#part-1-joint-walkthrough" id="toc-part-1-joint-walkthrough" class="nav-link" data-scroll-target="#part-1-joint-walkthrough">Part 1: Joint walkthrough</a>
+  <ul class="collapse">
+  <li><a href="#the-rstudio-environment" id="toc-the-rstudio-environment" class="nav-link" data-scroll-target="#the-rstudio-environment">1.1 The RStudio environment</a></li>
+  <li><a href="#r-as-a-calculator" id="toc-r-as-a-calculator" class="nav-link" data-scroll-target="#r-as-a-calculator">1.2 R as a calculator</a></li>
+  <li><a href="#functions" id="toc-functions" class="nav-link" data-scroll-target="#functions">1.3 Functions</a></li>
+  <li><a href="#variables" id="toc-variables" class="nav-link" data-scroll-target="#variables">1.4 Variables</a></li>
+  <li><a href="#vectors" id="toc-vectors" class="nav-link" data-scroll-target="#vectors">1.5 Vectors</a></li>
+  <li><a href="#functions-on-vectors" id="toc-functions-on-vectors" class="nav-link" data-scroll-target="#functions-on-vectors">1.6 Functions on vectors</a></li>
+  <li><a href="#subsetting-vectors" id="toc-subsetting-vectors" class="nav-link" data-scroll-target="#subsetting-vectors">1.7 Subsetting vectors</a></li>
+  <li><a href="#character-and-logical-vectors" id="toc-character-and-logical-vectors" class="nav-link" data-scroll-target="#character-and-logical-vectors">1.8 Character and logical vectors</a></li>
+  <li><a href="#data-frames" id="toc-data-frames" class="nav-link" data-scroll-target="#data-frames">1.9 Data frames</a></li>
+  </ul></li>
+  <li><a href="#part-2-datacamp" id="toc-part-2-datacamp" class="nav-link" data-scroll-target="#part-2-datacamp">Part 2: DataCamp</a></li>
+  <li><a href="#part-3-exercises-in-rstudio" id="toc-part-3-exercises-in-rstudio" class="nav-link" data-scroll-target="#part-3-exercises-in-rstudio">Part 3: Exercises in RStudio</a>
+  <ul class="collapse">
+  <li><a href="#warm-up-110" id="toc-warm-up-110" class="nav-link" data-scroll-target="#warm-up-110">Warm-up (1–10)</a></li>
+  <li><a href="#exercise-1-r-as-a-calculator" id="toc-exercise-1-r-as-a-calculator" class="nav-link" data-scroll-target="#exercise-1-r-as-a-calculator">Exercise 1 — R as a calculator</a></li>
+  <li><a href="#exercise-2-assigning-variables" id="toc-exercise-2-assigning-variables" class="nav-link" data-scroll-target="#exercise-2-assigning-variables">Exercise 2 — Assigning variables</a></li>
+  <li><a href="#exercise-3-using-functions" id="toc-exercise-3-using-functions" class="nav-link" data-scroll-target="#exercise-3-using-functions">Exercise 3 — Using functions</a></li>
+  <li><a href="#exercise-4-creating-a-vector" id="toc-exercise-4-creating-a-vector" class="nav-link" data-scroll-target="#exercise-4-creating-a-vector">Exercise 4 — Creating a vector</a></li>
+  <li><a href="#exercise-5-indexing-a-vector" id="toc-exercise-5-indexing-a-vector" class="nav-link" data-scroll-target="#exercise-5-indexing-a-vector">Exercise 5 — Indexing a vector</a></li>
+  <li><a href="#exercise-6-vector-arithmetic" id="toc-exercise-6-vector-arithmetic" class="nav-link" data-scroll-target="#exercise-6-vector-arithmetic">Exercise 6 — Vector arithmetic</a></li>
+  <li><a href="#exercise-7-logical-operators-filtering" id="toc-exercise-7-logical-operators-filtering" class="nav-link" data-scroll-target="#exercise-7-logical-operators-filtering">Exercise 7 — Logical operators &amp; filtering</a></li>
+  <li><a href="#exercise-8-exploring-a-data-frame" id="toc-exercise-8-exploring-a-data-frame" class="nav-link" data-scroll-target="#exercise-8-exploring-a-data-frame">Exercise 8 — Exploring a data frame</a></li>
+  <li><a href="#exercise-9-subsetting-a-data-frame" id="toc-exercise-9-subsetting-a-data-frame" class="nav-link" data-scroll-target="#exercise-9-subsetting-a-data-frame">Exercise 9 — Subsetting a data frame</a></li>
+  <li><a href="#exercise-10-troubleshooting-data-import" id="toc-exercise-10-troubleshooting-data-import" class="nav-link" data-scroll-target="#exercise-10-troubleshooting-data-import">Exercise 10 — Troubleshooting data import</a></li>
+  <li><a href="#building-up-1125" id="toc-building-up-1125" class="nav-link" data-scroll-target="#building-up-1125">Building up (11–25)</a></li>
+  <li><a href="#exercise-11-vectors-with-seq-and-rep" id="toc-exercise-11-vectors-with-seq-and-rep" class="nav-link" data-scroll-target="#exercise-11-vectors-with-seq-and-rep">Exercise 11 — Vectors with <code>seq()</code> and <code>rep()</code></a></li>
+  <li><a href="#exercise-12-vector-arithmetic-between-two-vectors" id="toc-exercise-12-vector-arithmetic-between-two-vectors" class="nav-link" data-scroll-target="#exercise-12-vector-arithmetic-between-two-vectors">Exercise 12 — Vector arithmetic between two vectors</a></li>
+  <li><a href="#exercise-13-named-vectors" id="toc-exercise-13-named-vectors" class="nav-link" data-scroll-target="#exercise-13-named-vectors">Exercise 13 — Named vectors</a></li>
+  <li><a href="#exercise-14-combining-logical-conditions" id="toc-exercise-14-combining-logical-conditions" class="nav-link" data-scroll-target="#exercise-14-combining-logical-conditions">Exercise 14 — Combining logical conditions</a></li>
+  <li><a href="#exercise-15-ifelse-for-recoding" id="toc-exercise-15-ifelse-for-recoding" class="nav-link" data-scroll-target="#exercise-15-ifelse-for-recoding">Exercise 15 — <code>ifelse()</code> for recoding</a></li>
+  <li><a href="#exercise-16-sorting-and-ordering" id="toc-exercise-16-sorting-and-ordering" class="nav-link" data-scroll-target="#exercise-16-sorting-and-ordering">Exercise 16 — Sorting and ordering</a></li>
+  <li><a href="#exercise-17-which" id="toc-exercise-17-which" class="nav-link" data-scroll-target="#exercise-17-which">Exercise 17 — <code>which()</code></a></li>
+  <li><a href="#exercise-18-building-a-data-frame-from-vectors" id="toc-exercise-18-building-a-data-frame-from-vectors" class="nav-link" data-scroll-target="#exercise-18-building-a-data-frame-from-vectors">Exercise 18 — Building a data frame from vectors</a></li>
+  <li><a href="#exercise-19-adding-a-computed-column" id="toc-exercise-19-adding-a-computed-column" class="nav-link" data-scroll-target="#exercise-19-adding-a-computed-column">Exercise 19 — Adding a computed column</a></li>
+  <li><a href="#exercise-20-multi-condition-subsetting" id="toc-exercise-20-multi-condition-subsetting" class="nav-link" data-scroll-target="#exercise-20-multi-condition-subsetting">Exercise 20 — Multi-condition subsetting</a></li>
+  <li><a href="#exercise-21-grouped-summary-with-tapply" id="toc-exercise-21-grouped-summary-with-tapply" class="nav-link" data-scroll-target="#exercise-21-grouped-summary-with-tapply">Exercise 21 — Grouped summary with <code>tapply()</code></a></li>
+  <li><a href="#exercise-22-a-first-matrix" id="toc-exercise-22-a-first-matrix" class="nav-link" data-scroll-target="#exercise-22-a-first-matrix">Exercise 22 — A first matrix</a></li>
+  <li><a href="#exercise-23-a-first-list" id="toc-exercise-23-a-first-list" class="nav-link" data-scroll-target="#exercise-23-a-first-list">Exercise 23 — A first list</a></li>
+  <li><a href="#exercise-24-reading-a-str-output" id="toc-exercise-24-reading-a-str-output" class="nav-link" data-scroll-target="#exercise-24-reading-a-str-output">Exercise 24 — Reading a <code>str()</code> output</a></li>
+  <li><a href="#exercise-25-putting-it-together" id="toc-exercise-25-putting-it-together" class="nav-link" data-scroll-target="#exercise-25-putting-it-together">Exercise 25 — Putting it together</a></li>
+  </ul></li>
+  <li><a href="#challenge-exercises-optional-for-the-keen" id="toc-challenge-exercises-optional-for-the-keen" class="nav-link" data-scroll-target="#challenge-exercises-optional-for-the-keen">Challenge exercises (optional — for the keen)</a>
+  <ul class="collapse">
+  <li><a href="#challenge-1-simulating-coin-flips" id="toc-challenge-1-simulating-coin-flips" class="nav-link" data-scroll-target="#challenge-1-simulating-coin-flips">Challenge 1 — Simulating coin flips</a></li>
+  <li><a href="#challenge-2-writing-your-own-function" id="toc-challenge-2-writing-your-own-function" class="nav-link" data-scroll-target="#challenge-2-writing-your-own-function">Challenge 2 — Writing your own function</a></li>
+  <li><a href="#challenge-3-implementing-the-mean-and-sd-by-hand" id="toc-challenge-3-implementing-the-mean-and-sd-by-hand" class="nav-link" data-scroll-target="#challenge-3-implementing-the-mean-and-sd-by-hand">Challenge 3 — Implementing the mean and SD by hand</a></li>
+  <li><a href="#challenge-4-debugging-a-broken-script" id="toc-challenge-4-debugging-a-broken-script" class="nav-link" data-scroll-target="#challenge-4-debugging-a-broken-script">Challenge 4 — Debugging a broken script</a></li>
+  <li><a href="#challenge-5-a-small-end-to-end-analysis" id="toc-challenge-5-a-small-end-to-end-analysis" class="nav-link" data-scroll-target="#challenge-5-a-small-end-to-end-analysis">Challenge 5 — A small end-to-end analysis</a></li>
+  </ul></li>
+  <li><a href="#reading-assigned-today-due-before-week-4" id="toc-reading-assigned-today-due-before-week-4" class="nav-link" data-scroll-target="#reading-assigned-today-due-before-week-4">Reading assigned today (due before Week 4)</a></li>
+  <li><a href="#where-to-get-help" id="toc-where-to-get-help" class="nav-link" data-scroll-target="#where-to-get-help">Where to get help</a></li>
+  </ul></li>
+  </ul>
+</nav>
+</div>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Seminar 1 — Introduction to R</h1>
+<p class="subtitle lead">PSY40760 Advanced Data Analysis and Statistics in R</p>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">September 18, 2026</p>
+    </div>
+  </div>
+    
+  </div>
+  
+
+</header>
+
+<section id="worksheet-1" class="level1">
+<h1>Worksheet 1</h1>
+<section id="welcome" class="level2">
+<h2 class="anchored" data-anchor-id="welcome">Welcome</h2>
+<p>This is the worksheet for our first session together. It provides you with background reading and a to-do list of items to complete before Friday, then guides you through the content of the practical.</p>
+</section>
+<section id="session-at-a-glance" class="level2">
+<h2 class="anchored" data-anchor-id="session-at-a-glance">Session at a glance</h2>
+<table class="table">
+<tbody>
+<tr class="odd">
+<td><strong>Workshop Date</strong></td>
+<td>Friday 18 September 2026</td>
+</tr>
+<tr class="even">
+<td><strong>Due Date</strong></td>
+<td>Sunday 27 September 2026, 23:59</td>
+</tr>
+<tr class="odd">
+<td><strong>Time</strong></td>
+<td>14:00 – 16:50 (170 min)</td>
+</tr>
+<tr class="even">
+<td><strong>Room</strong></td>
+<td>QUI-013</td>
+</tr>
+<tr class="odd">
+<td><strong>Staff</strong></td>
+<td>Dr Ondrej Zika, Cameron McCabe</td>
+</tr>
+<tr class="even">
+<td><strong>Theory</strong></td>
+<td>Estimation, probability &amp; inference</td>
+</tr>
+<tr class="odd">
+<td><strong>Practical</strong></td>
+<td>R/RStudio basics</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="before-you-arrive-three-things-to-do" class="level2">
+<h2 class="anchored" data-anchor-id="before-you-arrive-three-things-to-do">Before you arrive: three things to do</h2>
+<section id="install-r-rstudio-quarto-and-renv" class="level3">
+<h3 class="anchored" data-anchor-id="install-r-rstudio-quarto-and-renv">1. Install R, RStudio, Quarto and renv</h3>
+<p>Follow the <strong>Technical Setup Guide</strong> (posted in the General Setup section on Brightspace). You need:</p>
+<ul>
+<li>R (most recent version)</li>
+<li>RStudio Desktop</li>
+<li>the <code>renv</code> package (<code>install.packages("renv")</code>)</li>
+<li>Quarto (recent RStudio versions already bundle it — check with <code>quarto::quarto_version()</code> before installing separately)</li>
+</ul>
+<p>Budget 30–45 minutes. Git/GitHub setup is optional (useful, not required) — see the guide’s voluntary section.</p>
+<p><strong>If you get stuck:</strong> post on the PSY40780 (the research project module) module forum and tag Ondrej or Cameron.</p>
+</section>
+<section id="register-on-datacamp" class="level3">
+<h3 class="anchored" data-anchor-id="register-on-datacamp">2. Register on DataCamp</h3>
+<p>Register using this link: <a href="https://www.datacamp.com/groups/shared_links/dc97bf6128becabfdf1ceee81a08f934d23c11ad2de1c9fecf5487151c1c5c87" class="uri">https://www.datacamp.com/groups/shared_links/dc97bf6128becabfdf1ceee81a08f934d23c11ad2de1c9fecf5487151c1c5c87</a></p>
+<ul>
+<li><strong>Use your UCD/UCDConnect email address.</strong></li>
+<li><strong>Do not start any assignments prior to the session start.</strong></li>
+</ul>
+</section>
+<section id="reading" class="level3">
+<h3 class="anchored" data-anchor-id="reading">3. Reading</h3>
+<table class="table">
+<tbody>
+<tr class="odd">
+<td><strong>Theory</strong></td>
+<td><em>Statistical Thinking for the 21st Century</em> (Poldrack) — <a href="https://statsthinking21.github.io/statsthinking21-core-site/introduction.html">Ch. 1, Introduction</a> &amp; <a href="https://statsthinking21.github.io/statsthinking21-core-site/working-with-data.html">Ch. 2, Working with Data</a></td>
+</tr>
+<tr class="even">
+<td><strong>Practical</strong></td>
+<td><em>Modern Statistics with R</em> (Navarro &amp; Foxcroft) — <a href="https://www.modernstatisticswithr.com/introduction.html">Ch. 1, Introduction</a> &amp; <a href="https://www.modernstatisticswithr.com/thebasics.html#installation">Ch. 2.1–2.5</a> (Installing R and RStudio → Packages)</td>
+</tr>
+</tbody>
+</table>
+<p>Both textbooks are free online and will be used throughout the module — worth bookmarking now.</p>
+</section>
+</section>
+<section id="todays-session" class="level2">
+<h2 class="anchored" data-anchor-id="todays-session">Today’s session</h2>
+<p><strong>Theory:</strong> a revision of estimation, probability &amp; inference — population vs.&nbsp;sample, what “inference” means, probability vs.&nbsp;statistics as two directions of the same problem, frequentist reasoning, and why R specifically.</p>
+<p><strong>Practical:</strong> by the end you should be able to navigate RStudio, do basic arithmetic and use functions, assign variables, create and subset vectors, use logical operators to filter data, explore a data frame, and import a <code>.csv</code> file (including diagnosing why an import has failed).</p>
+<p>The session runs in three parts: a <strong>joint walkthrough</strong> (Part 1), where we code together as a group; <strong>independent DataCamp work</strong> (Part 2); and a set of <strong>in-notebook exercises</strong> (Part 3).</p>
+</section>
+<section id="assessment" class="level2">
+<h2 class="anchored" data-anchor-id="assessment">Assessment</h2>
+<p><strong>Deadline for completion:</strong> Sunday 27th September, 23:59.</p>
+<ol type="1">
+<li>Complete the mandatory assigned module on DataCamp (“Introduction to R”).</li>
+<li>Submit Worksheet 1 as a fully runnable <code>.qmd</code> file with completed exercises.</li>
+<li>Optional: create a GitHub repository and push your code there; include a link and reproduction instructions (please still submit the <code>.qmd</code> file on Brightspace).</li>
+</ol>
+<p>Name the file using your Student Number and surname as prefix, e.g.&nbsp;<code>2332334_Smith_worksheet_01.qmd</code></p>
+<p>Assignments 1 and 2 are mandatory and constitute 3% of your grade (pass/fail). Assignment 3 is optional and voluntary.</p>
+<hr>
+</section>
+<section id="part-1-joint-walkthrough" class="level2">
+<h2 class="anchored" data-anchor-id="part-1-joint-walkthrough">Part 1: Joint walkthrough</h2>
+<p>We will work through this section together as a group. Follow along in RStudio — run each chunk as we go and make sure you understand the output before moving on.</p>
+<section id="the-rstudio-environment" class="level3">
+<h3 class="anchored" data-anchor-id="the-rstudio-environment">1.1 The RStudio environment</h3>
+<p>When you open RStudio you will see (at least) three panes:</p>
+<ul>
+<li><strong>Console</strong> (bottom-left): where R executes commands. The <code>&gt;</code> prompt means R is ready for input.</li>
+<li><strong>Environment</strong> (top-right): shows every object you have created this session.</li>
+<li><strong>Files / Plots / Help</strong> (bottom-right): file browser, plot viewer, and help pages.</li>
+</ul>
+<p>When working with a <code>.qmd</code> or <code>.R</code> script (top-left pane), you write code there and send it to the console with <strong>Ctrl+Enter</strong> (Windows/Linux) or <strong>Cmd+Enter</strong> (Mac).</p>
+</section>
+<section id="r-as-a-calculator" class="level3">
+<h3 class="anchored" data-anchor-id="r-as-a-calculator">1.2 R as a calculator</h3>
+<p>The most basic use of R is arithmetic. Run the chunk below and observe the output carefully.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="dv">2</span> <span class="sc">+</span> <span class="dv">2</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 4</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="dv">10</span> <span class="sc">-</span> <span class="dv">3</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 7</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="dv">4</span> <span class="sc">*</span> <span class="dv">5</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 20</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="dv">10</span> <span class="sc">/</span> <span class="dv">3</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 3.333333</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="dv">2</span> <span class="sc">^</span> <span class="dv">6</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 64</code></pre>
+</div>
+</div>
+<p>The <code>[1]</code> before each result is an <em>index</em> — R’s way of telling you this is the first element of the output. When a result spans many lines, R prints the index at the start of each row so you can count where you are:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span><span class="sc">:</span><span class="dv">30</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1]  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25
+[26] 26 27 28 29 30</code></pre>
+</div>
+</div>
+<p>Operator precedence follows the usual mathematical rules (brackets, then exponents, then multiplication/division, then addition/subtraction):</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="dv">2</span> <span class="sc">+</span> <span class="dv">3</span> <span class="sc">*</span> <span class="dv">4</span>       <span class="co"># 14, not 20</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 14</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>(<span class="dv">2</span> <span class="sc">+</span> <span class="dv">3</span>) <span class="sc">*</span> <span class="dv">4</span>     <span class="co"># 20</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 20</code></pre>
+</div>
+</div>
+<p>Spaces don’t matter for most operations — <code>2+2</code> and <code>2 + 2</code> are identical. The exception is if you add a space <em>inside</em> a number: <code>6 8</code> is two separate numbers with no operator, which is an error.</p>
+<p><strong>Try it:</strong> Use R to calculate 2 to the power of 10. What does dividing a number by zero give you?</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># your code here</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="functions" class="level3">
+<h3 class="anchored" data-anchor-id="functions">1.3 Functions</h3>
+<p>Functions take input, do something, and return output. The input goes inside the brackets.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sqrt</span>(<span class="dv">144</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 12</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="fl">3.14159</span>, <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 3.14</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">log</span>(<span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 2.302585</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">abs</span>(<span class="sc">-</span><span class="dv">7</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 7</code></pre>
+</div>
+</div>
+<p>Functions can be nested — the inner one is evaluated first:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sqrt</span>(<span class="fu">log</span>(<span class="dv">10</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1.517427</code></pre>
+</div>
+</div>
+<p>When a function takes more than one argument you can pass them by position or by name. Both lines below do the same thing:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="fl">3.14159</span>, <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 3.14</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="at">x =</span> <span class="fl">3.14159</span>, <span class="at">digits =</span> <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 3.14</code></pre>
+</div>
+</div>
+<p>To see what arguments a function accepts, run <code>?round</code> or <code>help(round)</code> in the console.</p>
+</section>
+<section id="variables" class="level3">
+<h3 class="anchored" data-anchor-id="variables">1.4 Variables</h3>
+<p>Variables store values so you can reuse them. Use <code>&lt;-</code> to assign (read it as “gets”):</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>a <span class="ot">&lt;-</span> <span class="dv">4</span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>b <span class="ot">&lt;-</span> <span class="dv">5</span></span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>a <span class="sc">+</span> b</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 9</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>a <span class="sc">*</span> b</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 20</code></pre>
+</div>
+</div>
+<p>Notice that <code>a</code> and <code>b</code> now appear in your <strong>Environment</strong> pane. Variables remain there until you overwrite or remove them. Variables are case-sensitive: <code>a</code> and <code>A</code> are different objects.</p>
+<p>You can assign the result of any expression to a variable:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>n_sessions <span class="ot">&lt;-</span> <span class="dv">6</span> <span class="sc">*</span> <span class="dv">3</span></span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>n_sessions</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 18</code></pre>
+</div>
+</div>
+<p>Naming convention: all lower-case with underscores (<code>reaction_time</code>, not <code>ReactionTime</code>). Names must start with a letter and cannot contain spaces or <code>?</code>.</p>
+</section>
+<section id="vectors" class="level3">
+<h3 class="anchored" data-anchor-id="vectors">1.5 Vectors</h3>
+<p>We rarely work with single numbers. A <strong>vector</strong> stores multiple values of the same type in a fixed order.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>scores <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">72</span>, <span class="dv">85</span>, <span class="dv">91</span>, <span class="dv">68</span>, <span class="dv">79</span>, <span class="dv">88</span>)</span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>scores</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 72 85 91 68 79 88</code></pre>
+</div>
+</div>
+<p>Other ways to create vectors:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>                        <span class="co"># integers 1 to 10</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1]  1  2  3  4  5  6  7  8  9 10</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="at">by =</span> <span class="fl">0.25</span>)        <span class="co"># sequence with a fixed step</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.00 0.25 0.50 0.75 1.00</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rep</span>(<span class="st">"control"</span>, <span class="dv">4</span>)           <span class="co"># repeat a value n times</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "control" "control" "control" "control"</code></pre>
+</div>
+</div>
+</section>
+<section id="functions-on-vectors" class="level3">
+<h3 class="anchored" data-anchor-id="functions-on-vectors">1.6 Functions on vectors</h3>
+<p>Functions applied to a vector work on all elements at once.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="fu">length</span>(scores)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 6</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(scores)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 80.5</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sd</span>(scores)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 9.137833</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(scores)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 483</code></pre>
+</div>
+</div>
+<p>Arithmetic between a vector and a single number operates element-wise:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a>scores <span class="sc">*</span> <span class="dv">2</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 144 170 182 136 158 176</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a>scores <span class="sc">-</span> <span class="fu">mean</span>(scores)   <span class="co"># centre the scores</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1]  -8.5   4.5  10.5 -12.5  -1.5   7.5</code></pre>
+</div>
+</div>
+<p>Arithmetic between two vectors of the same length also operates element-wise:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb58"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a>time1 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">5.2</span>, <span class="fl">4.8</span>, <span class="fl">6.1</span>)</span>
+<span id="cb58-2"><a href="#cb58-2" aria-hidden="true" tabindex="-1"></a>time2 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">4.9</span>, <span class="fl">4.7</span>, <span class="fl">5.8</span>)</span>
+<span id="cb58-3"><a href="#cb58-3" aria-hidden="true" tabindex="-1"></a>time1 <span class="sc">-</span> time2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.3 0.1 0.3</code></pre>
+</div>
+</div>
+</section>
+<section id="subsetting-vectors" class="level3">
+<h3 class="anchored" data-anchor-id="subsetting-vectors">1.7 Subsetting vectors</h3>
+<p>Use square brackets <code>[ ]</code> to extract elements by position:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb60"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a>scores[<span class="dv">1</span>]           <span class="co"># first element</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 72</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb62"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a>scores[<span class="dv">2</span><span class="sc">:</span><span class="dv">4</span>]         <span class="co"># elements 2, 3, 4</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 85 91 68</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb64"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a>scores[<span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">5</span>)]     <span class="co"># elements 1 and 5</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 72 79</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb66"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb66-1"><a href="#cb66-1" aria-hidden="true" tabindex="-1"></a>scores[<span class="sc">-</span><span class="dv">1</span>]          <span class="co"># everything except the first element</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 85 91 68 79 88</code></pre>
+</div>
+</div>
+<p>A logical test applied to a vector returns <code>TRUE</code> or <code>FALSE</code> for each element:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb68"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb68-1"><a href="#cb68-1" aria-hidden="true" tabindex="-1"></a>scores <span class="sc">&gt;</span> <span class="dv">80</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] FALSE  TRUE  TRUE FALSE FALSE  TRUE</code></pre>
+</div>
+</div>
+<p>Use that result to subset — only elements where the condition is <code>TRUE</code> are returned:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb70"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb70-1"><a href="#cb70-1" aria-hidden="true" tabindex="-1"></a>scores[scores <span class="sc">&gt;</span> <span class="dv">80</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 85 91 88</code></pre>
+</div>
+</div>
+</section>
+<section id="character-and-logical-vectors" class="level3">
+<h3 class="anchored" data-anchor-id="character-and-logical-vectors">1.8 Character and logical vectors</h3>
+<p>Vectors can hold text (character type) or logical values (<code>TRUE</code>/<code>FALSE</code>):</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb72"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb72-1"><a href="#cb72-1" aria-hidden="true" tabindex="-1"></a>conditions <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"control"</span>, <span class="st">"treatment"</span>, <span class="st">"control"</span>, <span class="st">"treatment"</span>, <span class="st">"control"</span>, <span class="st">"treatment"</span>)</span>
+<span id="cb72-2"><a href="#cb72-2" aria-hidden="true" tabindex="-1"></a><span class="fu">class</span>(conditions)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "character"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb74"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb74-1"><a href="#cb74-1" aria-hidden="true" tabindex="-1"></a><span class="fu">class</span>(scores)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "numeric"</code></pre>
+</div>
+</div>
+<p>Key logical operators: <code>==</code> (equal), <code>!=</code> (not equal), <code>&gt;</code>, <code>&lt;</code>, <code>&gt;=</code>, <code>&lt;=</code>, <code>&amp;</code> (AND), <code>|</code> (OR), <code>!</code> (NOT). Note: always use double <code>==</code> for equality tests; a single <code>=</code> means something else.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb76"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb76-1"><a href="#cb76-1" aria-hidden="true" tabindex="-1"></a>conditions <span class="sc">==</span> <span class="st">"control"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1]  TRUE FALSE  TRUE FALSE  TRUE FALSE</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb78"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb78-1"><a href="#cb78-1" aria-hidden="true" tabindex="-1"></a>conditions <span class="sc">!=</span> <span class="st">"control"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] FALSE  TRUE FALSE  TRUE FALSE  TRUE</code></pre>
+</div>
+</div>
+<p>Combine conditions with <code>&amp;</code> or <code>|</code>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb80"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb80-1"><a href="#cb80-1" aria-hidden="true" tabindex="-1"></a>scores <span class="sc">&gt;</span> <span class="dv">80</span> <span class="sc">&amp;</span> conditions <span class="sc">==</span> <span class="st">"control"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] FALSE FALSE  TRUE FALSE FALSE FALSE</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb82"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb82-1"><a href="#cb82-1" aria-hidden="true" tabindex="-1"></a>scores[scores <span class="sc">&gt;</span> <span class="dv">80</span> <span class="sc">&amp;</span> conditions <span class="sc">==</span> <span class="st">"control"</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 91</code></pre>
+</div>
+</div>
+<p>You can store a logical result as a variable, which is useful when the condition is complex:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb84"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb84-1"><a href="#cb84-1" aria-hidden="true" tabindex="-1"></a>is_high_control <span class="ot">&lt;-</span> scores <span class="sc">&gt;</span> <span class="dv">80</span> <span class="sc">&amp;</span> conditions <span class="sc">==</span> <span class="st">"control"</span></span>
+<span id="cb84-2"><a href="#cb84-2" aria-hidden="true" tabindex="-1"></a>scores[is_high_control]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 91</code></pre>
+</div>
+</div>
+</section>
+<section id="data-frames" class="level3">
+<h3 class="anchored" data-anchor-id="data-frames">1.9 Data frames</h3>
+<p>A <strong>data frame</strong> is a table: rows are observations, columns are variables. Unlike vectors, different columns can hold different types. R includes several built-in data frames — we will use <code>trees</code>, which records the girth, height, and volume of 31 cherry trees.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb86"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb86-1"><a href="#cb86-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(trees)       <span class="co"># first 6 rows</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  Girth Height Volume
+1   8.3     70   10.3
+2   8.6     65   10.3
+3   8.8     63   10.2
+4  10.5     72   16.4
+5  10.7     81   18.8
+6  10.8     83   19.7</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb88"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb88-1"><a href="#cb88-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tail</span>(trees)       <span class="co"># last 6 rows</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   Girth Height Volume
+26  17.3     81   55.4
+27  17.5     82   55.7
+28  17.9     80   58.3
+29  18.0     80   51.5
+30  18.0     80   51.0
+31  20.6     87   77.0</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb90"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb90-1"><a href="#cb90-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(trees)        <span class="co"># structure: column names, types, sample values</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>'data.frame':   31 obs. of  3 variables:
+ $ Girth : num  8.3 8.6 8.8 10.5 10.7 10.8 11 11 11.1 11.2 ...
+ $ Height: num  70 65 63 72 81 83 66 75 80 75 ...
+ $ Volume: num  10.3 10.3 10.2 16.4 18.8 19.7 15.6 18.2 22.6 19.9 ...</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb92"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb92-1"><a href="#cb92-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(trees)    <span class="co"># descriptive statistics for each column</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     Girth           Height       Volume     
+ Min.   : 8.30   Min.   :63   Min.   :10.20  
+ 1st Qu.:11.05   1st Qu.:72   1st Qu.:19.40  
+ Median :12.90   Median :76   Median :24.20  
+ Mean   :13.25   Mean   :76   Mean   :30.17  
+ 3rd Qu.:15.25   3rd Qu.:80   3rd Qu.:37.30  
+ Max.   :20.60   Max.   :87   Max.   :77.00  </code></pre>
+</div>
+</div>
+<p>Access a single column with <code>$</code>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb94"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb94-1"><a href="#cb94-1" aria-hidden="true" tabindex="-1"></a>trees<span class="sc">$</span>Height</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] 70 65 63 72 81 83 66 75 80 75 79 76 76 69 75 74 85 86 71 64 78 80 74 72 77
+[26] 81 82 80 80 80 87</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb96"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb96-1"><a href="#cb96-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(trees<span class="sc">$</span>Height)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 76</code></pre>
+</div>
+</div>
+<p>Subset rows with a logical condition. Note the comma — it separates row selection from column selection; leaving column selection blank means “keep all columns”:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb98"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb98-1"><a href="#cb98-1" aria-hidden="true" tabindex="-1"></a>trees[trees<span class="sc">$</span>Height <span class="sc">&gt;</span> <span class="dv">75</span>, ]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   Girth Height Volume
+5   10.7     81   18.8
+6   10.8     83   19.7
+9   11.1     80   22.6
+11  11.3     79   24.2
+12  11.4     76   21.0
+13  11.4     76   21.4
+17  12.9     85   33.8
+18  13.3     86   27.4
+21  14.0     78   34.5
+22  14.2     80   31.7
+25  16.3     77   42.6
+26  17.3     81   55.4
+27  17.5     82   55.7
+28  17.9     80   58.3
+29  18.0     80   51.5
+30  18.0     80   51.0
+31  20.6     87   77.0</code></pre>
+</div>
+</div>
+<p>Combine conditions to filter on multiple variables:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb100"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb100-1"><a href="#cb100-1" aria-hidden="true" tabindex="-1"></a>trees[trees<span class="sc">$</span>Height <span class="sc">&gt;</span> <span class="dv">75</span> <span class="sc">&amp;</span> trees<span class="sc">$</span>Volume <span class="sc">&gt;</span> <span class="dv">30</span>, ]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   Girth Height Volume
+17  12.9     85   33.8
+21  14.0     78   34.5
+22  14.2     80   31.7
+25  16.3     77   42.6
+26  17.3     81   55.4
+27  17.5     82   55.7
+28  17.9     80   58.3
+29  18.0     80   51.5
+30  18.0     80   51.0
+31  20.6     87   77.0</code></pre>
+</div>
+</div>
+<p>Add a new column by assigning to <code>dataset$new_column</code>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb102"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb102-1"><a href="#cb102-1" aria-hidden="true" tabindex="-1"></a>trees<span class="sc">$</span>Girth_cm <span class="ot">&lt;-</span> trees<span class="sc">$</span>Girth <span class="sc">*</span> <span class="fl">2.54</span>   <span class="co"># convert from inches to cm</span></span>
+<span id="cb102-2"><a href="#cb102-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(trees)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  Girth Height Volume Girth_cm
+1   8.3     70   10.3   21.082
+2   8.6     65   10.3   21.844
+3   8.8     63   10.2   22.352
+4  10.5     72   16.4   26.670
+5  10.7     81   18.8   27.178
+6  10.8     83   19.7   27.432</code></pre>
+</div>
+</div>
+<hr>
+</section>
+</section>
+<section id="part-2-datacamp" class="level2">
+<h2 class="anchored" data-anchor-id="part-2-datacamp">Part 2: DataCamp</h2>
+<p>Complete the <strong>“Introduction to R”</strong> assignment on DataCamp. This covers the same material as Part 1, at your own pace with immediate feedback — it counts towards your grade (see Assessment above).</p>
+<hr>
+</section>
+<section id="part-3-exercises-in-rstudio" class="level2">
+<h2 class="anchored" data-anchor-id="part-3-exercises-in-rstudio">Part 3: Exercises in RStudio</h2>
+<p>These exercises are meant to be completed independently, in this notebook. Write your code in the chunks provided and check the result before moving on.</p>
+<p>Exercises 1–10 are a warm-up. Exercises 11–25 build further. All 25 are mandatory.</p>
+<section id="warm-up-110" class="level3">
+<h3 class="anchored" data-anchor-id="warm-up-110">Warm-up (1–10)</h3>
+</section>
+<section id="exercise-1-r-as-a-calculator" class="level3">
+<h3 class="anchored" data-anchor-id="exercise-1-r-as-a-calculator">Exercise 1 — R as a calculator</h3>
+<p>A study runs for 6 weeks, with 3 sessions per week. Use R to calculate the total number of sessions.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb104"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb104-1"><a href="#cb104-1" aria-hidden="true" tabindex="-1"></a><span class="co"># your code here</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="exercise-2-assigning-variables" class="level3">
+<h3 class="anchored" data-anchor-id="exercise-2-assigning-variables">Exercise 2 — Assigning variables</h3>
+<p>Assign the width and height of a rectangle (in cm) to two variables, then use them to calculate its area.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb105"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb105-1"><a href="#cb105-1" aria-hidden="true" tabindex="-1"></a>width <span class="ot">&lt;-</span> <span class="dv">10</span>   <span class="co"># cm — change to your own value</span></span>
+<span id="cb105-2"><a href="#cb105-2" aria-hidden="true" tabindex="-1"></a>height <span class="ot">&lt;-</span> <span class="dv">5</span>   <span class="co"># cm — change to your own value</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="exercise-3-using-functions" class="level3">
+<h3 class="anchored" data-anchor-id="exercise-3-using-functions">Exercise 3 — Using functions</h3>
+<p>Use a built-in function to calculate the square root of 144, and another to round <code>7.836</code> to one decimal place.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb106"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb106-1"><a href="#cb106-1" aria-hidden="true" tabindex="-1"></a><span class="co"># your code here</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="exercise-4-creating-a-vector" class="level3">
+<h3 class="anchored" data-anchor-id="exercise-4-creating-a-vector">Exercise 4 — Creating a vector</h3>
+<p>Create a vector called <code>reaction_times</code> containing these five reaction times (in ms): 412, 398, 405, 430, 389.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb107"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb107-1"><a href="#cb107-1" aria-hidden="true" tabindex="-1"></a><span class="co"># your code here</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="exercise-5-indexing-a-vector" class="level3">
+<h3 class="anchored" data-anchor-id="exercise-5-indexing-a-vector">Exercise 5 — Indexing a vector</h3>
+<p>Using <code>reaction_times</code> from Exercise 4, extract the 3rd value, and then the first two values.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb108"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb108-1"><a href="#cb108-1" aria-hidden="true" tabindex="-1"></a><span class="co"># your code here</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="exercise-6-vector-arithmetic" class="level3">
+<h3 class="anchored" data-anchor-id="exercise-6-vector-arithmetic">Exercise 6 — Vector arithmetic</h3>
+<p>Convert all values in <code>reaction_times</code> from milliseconds to seconds (divide by 1000) in one line.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb109"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb109-1"><a href="#cb109-1" aria-hidden="true" tabindex="-1"></a><span class="co"># your code here</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="exercise-7-logical-operators-filtering" class="level3">
+<h3 class="anchored" data-anchor-id="exercise-7-logical-operators-filtering">Exercise 7 — Logical operators &amp; filtering</h3>
+<p>Using <code>reaction_times</code>, create a logical vector showing which values are greater than 400, then use it to extract only those values.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb110"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb110-1"><a href="#cb110-1" aria-hidden="true" tabindex="-1"></a><span class="co"># your code here</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="exercise-8-exploring-a-data-frame" class="level3">
+<h3 class="anchored" data-anchor-id="exercise-8-exploring-a-data-frame">Exercise 8 — Exploring a data frame</h3>
+<p>R comes with a built-in data frame called <code>trees</code>. Use <code>str()</code>, <code>head()</code>, and <code>summary()</code> to explore it. What does each function tell you?</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb111"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb111-1"><a href="#cb111-1" aria-hidden="true" tabindex="-1"></a><span class="co"># your code here</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="exercise-9-subsetting-a-data-frame" class="level3">
+<h3 class="anchored" data-anchor-id="exercise-9-subsetting-a-data-frame">Exercise 9 — Subsetting a data frame</h3>
+<p>From <code>trees</code>, extract just the <code>Height</code> column using <code>$</code>, then extract only the rows where <code>Height</code> is greater than 75.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb112"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb112-1"><a href="#cb112-1" aria-hidden="true" tabindex="-1"></a><span class="co"># your code here</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="exercise-10-troubleshooting-data-import" class="level3">
+<h3 class="anchored" data-anchor-id="exercise-10-troubleshooting-data-import">Exercise 10 — Troubleshooting data import</h3>
+<p>The code below is meant to import a file called <code>my_data.csv</code> but fails. Without running it, identify what’s likely wrong, then fix it and explain your reasoning in a comment.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb113"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb113-1"><a href="#cb113-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"Desktop/my_data.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><em>Hint: think about what “working directory” means, and where RStudio is actually looking for that file.</em></p>
+</section>
+<section id="building-up-1125" class="level3">
+<h3 class="anchored" data-anchor-id="building-up-1125">Building up (11–25)</h3>
+</section>
+<section id="exercise-11-vectors-with-seq-and-rep" class="level3">
+<h3 class="anchored" data-anchor-id="exercise-11-vectors-with-seq-and-rep">Exercise 11 — Vectors with <code>seq()</code> and <code>rep()</code></h3>
+<p>Create a vector of the session weeks for this module (2, 4, 6, 10, 11, 12) using <code>c()</code>, then a vector counting from 1 to 12 using <code>seq()</code>, and a vector that repeats <code>"pass"</code> 5 times using <code>rep()</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb114"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb114-1"><a href="#cb114-1" aria-hidden="true" tabindex="-1"></a><span class="co"># your code here</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="exercise-12-vector-arithmetic-between-two-vectors" class="level3">
+<h3 class="anchored" data-anchor-id="exercise-12-vector-arithmetic-between-two-vectors">Exercise 12 — Vector arithmetic between two vectors</h3>
+<p><code>time1 &lt;- c(5.2, 4.8, 6.1, 5.5)</code> and <code>time2 &lt;- c(4.9, 4.7, 5.8, 5.0)</code> are a participant’s times (seconds) on attempt 1 and attempt 2 of the same task. Calculate the improvement (<code>time1 - time2</code>) for each attempt, and the mean improvement.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb115"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb115-1"><a href="#cb115-1" aria-hidden="true" tabindex="-1"></a>time1 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">5.2</span>, <span class="fl">4.8</span>, <span class="fl">6.1</span>, <span class="fl">5.5</span>)</span>
+<span id="cb115-2"><a href="#cb115-2" aria-hidden="true" tabindex="-1"></a>time2 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">4.9</span>, <span class="fl">4.7</span>, <span class="fl">5.8</span>, <span class="fl">5.0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="exercise-13-named-vectors" class="level3">
+<h3 class="anchored" data-anchor-id="exercise-13-named-vectors">Exercise 13 — Named vectors</h3>
+<p>Create a named vector giving the room for each session: Week 2 = “QUI-013”, Week 4 = “L249-SUTH”, Week 6 = “QUI-013”. Use the name (not the position) to look up Week 4’s room.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb116"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb116-1"><a href="#cb116-1" aria-hidden="true" tabindex="-1"></a><span class="co"># your code here</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="exercise-14-combining-logical-conditions" class="level3">
+<h3 class="anchored" data-anchor-id="exercise-14-combining-logical-conditions">Exercise 14 — Combining logical conditions</h3>
+<p>Using <code>reaction_times</code> from Exercise 4, extract the values that are greater than 395 <strong>and</strong> less than 420.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb117"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb117-1"><a href="#cb117-1" aria-hidden="true" tabindex="-1"></a><span class="co"># your code here</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="exercise-15-ifelse-for-recoding" class="level3">
+<h3 class="anchored" data-anchor-id="exercise-15-ifelse-for-recoding">Exercise 15 — <code>ifelse()</code> for recoding</h3>
+<p>Using <code>reaction_times</code>, create a new vector <code>speed_label</code> that says <code>"fast"</code> where the time is below 400 ms and <code>"slow"</code> otherwise, using <code>ifelse()</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb118"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb118-1"><a href="#cb118-1" aria-hidden="true" tabindex="-1"></a><span class="co"># your code here</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="exercise-16-sorting-and-ordering" class="level3">
+<h3 class="anchored" data-anchor-id="exercise-16-sorting-and-ordering">Exercise 16 — Sorting and ordering</h3>
+<p>Sort <code>reaction_times</code> from fastest to slowest using <code>sort()</code>. Then use <code>order()</code> to get the <em>positions</em> that would produce the same ordering. Verify the two approaches give consistent results.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb119"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb119-1"><a href="#cb119-1" aria-hidden="true" tabindex="-1"></a><span class="co"># your code here</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="exercise-17-which" class="level3">
+<h3 class="anchored" data-anchor-id="exercise-17-which">Exercise 17 — <code>which()</code></h3>
+<p>Using <code>reaction_times</code>, use <code>which()</code> to find the <em>position</em> of the slowest trial, then use that position to extract the value itself.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb120"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb120-1"><a href="#cb120-1" aria-hidden="true" tabindex="-1"></a><span class="co"># your code here</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="exercise-18-building-a-data-frame-from-vectors" class="level3">
+<h3 class="anchored" data-anchor-id="exercise-18-building-a-data-frame-from-vectors">Exercise 18 — Building a data frame from vectors</h3>
+<p>Create a data frame called <code>participants</code> with three columns: <code>id</code> (1 to 5), <code>age</code> (five plausible ages), and <code>group</code> (a mix of <code>"control"</code> and <code>"treatment"</code>).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb121"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb121-1"><a href="#cb121-1" aria-hidden="true" tabindex="-1"></a><span class="co"># your code here</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="exercise-19-adding-a-computed-column" class="level3">
+<h3 class="anchored" data-anchor-id="exercise-19-adding-a-computed-column">Exercise 19 — Adding a computed column</h3>
+<p>Using <code>participants</code> from Exercise 18, add a new column <code>age_months</code> that converts <code>age</code> to months.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb122"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb122-1"><a href="#cb122-1" aria-hidden="true" tabindex="-1"></a><span class="co"># your code here</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="exercise-20-multi-condition-subsetting" class="level3">
+<h3 class="anchored" data-anchor-id="exercise-20-multi-condition-subsetting">Exercise 20 — Multi-condition subsetting</h3>
+<p>From <code>trees</code>, extract the rows where <code>Height &gt; 75</code> <strong>and</strong> <code>Volume &gt; 40</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb123"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb123-1"><a href="#cb123-1" aria-hidden="true" tabindex="-1"></a><span class="co"># your code here</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="exercise-21-grouped-summary-with-tapply" class="level3">
+<h3 class="anchored" data-anchor-id="exercise-21-grouped-summary-with-tapply">Exercise 21 — Grouped summary with <code>tapply()</code></h3>
+<p>Using <code>participants</code> from Exercise 18, use <code>tapply()</code> to calculate the mean <code>age</code> separately for each <code>group</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb124"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb124-1"><a href="#cb124-1" aria-hidden="true" tabindex="-1"></a><span class="co"># your code here</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="exercise-22-a-first-matrix" class="level3">
+<h3 class="anchored" data-anchor-id="exercise-22-a-first-matrix">Exercise 22 — A first matrix</h3>
+<p>Create a 3×3 matrix of the numbers 1–9 using <code>matrix()</code>, filled by row. Extract the element in row 2, column 3, and then the whole second row.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb125"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb125-1"><a href="#cb125-1" aria-hidden="true" tabindex="-1"></a><span class="co"># your code here</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="exercise-23-a-first-list" class="level3">
+<h3 class="anchored" data-anchor-id="exercise-23-a-first-list">Exercise 23 — A first list</h3>
+<p>Create a list called <code>my_analysis</code> with three elements: a character string with your name, the <code>reaction_times</code> vector, and the <code>participants</code> data frame. Access each element by name using <code>$</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb126"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb126-1"><a href="#cb126-1" aria-hidden="true" tabindex="-1"></a><span class="co"># your code here</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="exercise-24-reading-a-str-output" class="level3">
+<h3 class="anchored" data-anchor-id="exercise-24-reading-a-str-output">Exercise 24 — Reading a <code>str()</code> output</h3>
+<p>Run <code>str(trees)</code> and write a comment above your code describing what each line of the output tells you (type, dimensions, sample values).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb127"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb127-1"><a href="#cb127-1" aria-hidden="true" tabindex="-1"></a><span class="co"># your code here</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="exercise-25-putting-it-together" class="level3">
+<h3 class="anchored" data-anchor-id="exercise-25-putting-it-together">Exercise 25 — Putting it together</h3>
+<p>Using <code>trees</code>: (1) add a new column <code>Height_m</code> converting <code>Height</code> from feet to metres (1 ft = 0.3048 m), (2) filter to trees with <code>Height_m</code> above the median, (3) report how many trees remain.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb128"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb128-1"><a href="#cb128-1" aria-hidden="true" tabindex="-1"></a><span class="co"># your code here</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<hr>
+</section>
+</section>
+<section id="challenge-exercises-optional-for-the-keen" class="level2">
+<h2 class="anchored" data-anchor-id="challenge-exercises-optional-for-the-keen">Challenge exercises (optional — for the keen)</h2>
+<p>These go beyond what has been explicitly covered. Have a go if you finish early, or come back to them later in the term.</p>
+<section id="challenge-1-simulating-coin-flips" class="level3">
+<h3 class="anchored" data-anchor-id="challenge-1-simulating-coin-flips">Challenge 1 — Simulating coin flips</h3>
+<p>Use <code>sample(c("H", "T"), size = 100, replace = TRUE)</code> to simulate 100 coin flips. Calculate the proportion of heads. Then repeat with 10, 1000, and 10 000 flips — what do you notice about how the proportion behaves as the number of flips grows? (This is the frequentist idea from today’s lecture, in code.)</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb129"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb129-1"><a href="#cb129-1" aria-hidden="true" tabindex="-1"></a><span class="co"># your code here</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="challenge-2-writing-your-own-function" class="level3">
+<h3 class="anchored" data-anchor-id="challenge-2-writing-your-own-function">Challenge 2 — Writing your own function</h3>
+<p>Write a function <code>celsius_to_fahrenheit(c)</code> that converts a temperature in Celsius to Fahrenheit (<code>F = C * 9/5 + 32</code>). Test it on a vector of several temperatures at once.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb130"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb130-1"><a href="#cb130-1" aria-hidden="true" tabindex="-1"></a>celsius_to_fahrenheit <span class="ot">&lt;-</span> <span class="cf">function</span>(c) {</span>
+<span id="cb130-2"><a href="#cb130-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb130-3"><a href="#cb130-3" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="challenge-3-implementing-the-mean-and-sd-by-hand" class="level3">
+<h3 class="anchored" data-anchor-id="challenge-3-implementing-the-mean-and-sd-by-hand">Challenge 3 — Implementing the mean and SD by hand</h3>
+<p>Without using <code>mean()</code> or <code>sd()</code>, calculate the mean and standard deviation of <code>reaction_times</code> using only <code>sum()</code>, <code>length()</code>, and arithmetic. Check your answers match the built-in functions.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb131"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb131-1"><a href="#cb131-1" aria-hidden="true" tabindex="-1"></a><span class="co"># your code here</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="challenge-4-debugging-a-broken-script" class="level3">
+<h3 class="anchored" data-anchor-id="challenge-4-debugging-a-broken-script">Challenge 4 — Debugging a broken script</h3>
+<p>The script below is meant to calculate the mean height of trees taller than 70 feet, but contains three separate bugs. Find and fix all of them (write the corrected version below the buggy code).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb132"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb132-1"><a href="#cb132-1" aria-hidden="true" tabindex="-1"></a>Trees_data <span class="ot">&lt;-</span> trees</span>
+<span id="cb132-2"><a href="#cb132-2" aria-hidden="true" tabindex="-1"></a>tall_trees <span class="ot">&lt;-</span> trees_data[trees_data<span class="sc">$</span>Height <span class="sc">&gt;</span> <span class="dv">70</span>]</span>
+<span id="cb132-3"><a href="#cb132-3" aria-hidden="true" tabindex="-1"></a>mean_height <span class="ot">&lt;-</span> <span class="fu">mean</span>(tall_trees<span class="sc">$</span>Height)<span class="er">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb133"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb133-1"><a href="#cb133-1" aria-hidden="true" tabindex="-1"></a><span class="co"># corrected version here</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="challenge-5-a-small-end-to-end-analysis" class="level3">
+<h3 class="anchored" data-anchor-id="challenge-5-a-small-end-to-end-analysis">Challenge 5 — A small end-to-end analysis</h3>
+<p>Using the built-in <code>airquality</code> dataset: (1) find how many rows have a missing (<code>NA</code>) <code>Ozone</code> value, (2) remove those rows, (3) calculate the mean <code>Temp</code> separately for each <code>Month</code>, (4) identify which month had the highest mean temperature. Do this in one connected block, storing intermediate results in clearly named variables.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb134"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb134-1"><a href="#cb134-1" aria-hidden="true" tabindex="-1"></a><span class="co"># your code here</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<hr>
+</section>
+</section>
+<section id="reading-assigned-today-due-before-week-4" class="level2">
+<h2 class="anchored" data-anchor-id="reading-assigned-today-due-before-week-4">Reading assigned today (due before Week 4)</h2>
+<ul>
+<li>Lakens, D. (2013). <em>Calculating and reporting effect sizes to facilitate cumulative science: a practical primer for t-tests and ANOVAs.</em> Frontiers in Psychology. (full paper)</li>
+<li><em>Modern Statistics with R</em>, <a href="https://modernstatisticswithr.com/basicstatistics.html#hypotheses">§3.3</a></li>
+</ul>
+<p>Due before Wednesday 30 September 2026 (Week 4).</p>
+</section>
+<section id="where-to-get-help" class="level2">
+<h2 class="anchored" data-anchor-id="where-to-get-help">Where to get help</h2>
+<p>Ask on the PSY40780 module forum (tag Ondrej or Cameron) any time before the session, or bring questions/your laptop to the practical — Cameron is there specifically for this.</p>
+</section>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
