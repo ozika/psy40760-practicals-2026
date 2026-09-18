@@ -35,7 +35,7 @@ Follow the **Technical Setup Guide** (posted in the General Setup section on Bri
 - R (most recent version)
 - RStudio Desktop
 - the `renv` package (`install.packages("renv")`)
-- Quarto (recent RStudio versions already bundle it — check with `quarto::quarto_version()` before installing separately)
+- Quarto (recent RStudio versions already bundle it — check with `quarto::quarto_version()` before installing separately), then `renv::install("quarto")`
 
 Budget 30–45 minutes. Git/GitHub setup is optional (useful, not required) — see the guide's voluntary section.
 
@@ -271,7 +271,44 @@ is_high_control <- scores > 80 & conditions == "control"
 scores[is_high_control]
 ```
 
-### 1.9 Data frames
+### 1.9 Variable types
+
+Every value in R has a **type**, and it determines which operations and summaries actually make sense for it. We've been using a few types already without naming them — here's a quick tour.
+
+```{r}
+class(scores)       # "numeric" — a measured quantity (interval/ratio)
+class(conditions)   # "character" — plain text
+class(TRUE)         # "logical" — TRUE / FALSE
+class(1:5)          # "integer" — whole numbers
+```
+
+Categorical variables are usually better stored as **factors** rather than plain character text — a factor tells R the values represent a fixed set of categories, not free text:
+
+```{r}
+condition_factor <- factor(conditions)
+class(condition_factor)
+levels(condition_factor)
+```
+
+If the categories have a natural order — unlike `"control"`/`"treatment"`, which don't — use an **ordered factor** instead:
+
+```{r}
+pain_rating <- factor(c("low", "high", "medium", "low", "high"),
+                       levels = c("low", "medium", "high"),
+                       ordered = TRUE)
+pain_rating
+pain_rating[1] < pain_rating[2]   # comparisons like this only make sense because it's ordered
+```
+
+This maps directly onto the measurement scales from this week's reading: unordered categories (`factor`) are **nominal**, ordered categories (`ordered factor`) are **ordinal**, and plain numbers (`numeric`/`integer`) are **interval or ratio**. Storing a variable as the wrong type is a common source of nonsensical results later — e.g. R will let you average a nominal code if it's stored as numbers, even though the average is meaningless.
+
+**Try it:** create an ordered factor for exam grades with levels `"F"`, `"D"`, `"C"`, `"B"`, `"A"` (in that order), then check whether a grade of `"B"` is higher than a grade of `"D"`.
+
+```{r}
+# your code here
+```
+
+### 1.10 Data frames
 
 A **data frame** is a table: rows are observations, columns are variables. Unlike vectors, different columns can hold different types. R includes several built-in data frames — we will use `trees`, which records the girth, height, and volume of 31 cherry trees.
 
