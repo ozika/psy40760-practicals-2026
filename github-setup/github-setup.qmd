@@ -1,0 +1,107 @@
+---
+title: "GitHub Cheat Sheet: Fork, Submit, and Share Your Work"
+subtitle: "PSY40760 — Advanced Data Analysis and Statistics in R (optional, for Git users)"
+date: 2026-09-18
+format:
+  html:
+    toc: true
+    number-sections: false
+---
+
+## Who this is for
+
+This guide is only for students who chose the **voluntary Git/GitHub path** in the Technical Setup Guide. If you didn't set up Git, you don't need this — you'll download materials and submit worksheets through Brightspace instead, exactly like everyone else.
+
+You need a free [GitHub account](https://github.com/join) and Git installed before starting (both covered in the Technical Setup Guide's voluntary section).
+
+## What you'll do
+
+By the end of this guide, you'll have:
+
+1. **Forked** the course practicals repository, so you have your own copy on GitHub.
+2. **Created a new repository** on GitHub to hold your own completed work.
+3. **Pushed your code** to that new repository.
+4. **Shared** that repository with `ozika` and `cameron-mccabe`, so we can see your work.
+
+## Step 1: Fork the course repository
+
+A **fork** is your own personal copy of a repository on GitHub. Forking the course repo lets you pull down new weeks' materials as they're released, without affecting the original.
+
+1. Go to <https://github.com/ozika/psy40760-practicals-2026>.
+2. Click **Fork** (top-right corner of the page).
+3. Leave the settings as they are, and click **Create fork**.
+
+You now have your own copy at `github.com/<your-username>/psy40760-practicals-2026`.
+
+### Clone your fork to your computer
+
+Open a terminal (or the RStudio **Terminal** tab) and run, replacing `<your-username>` with your actual GitHub username:
+
+```bash
+git clone git@github.com:<your-username>/psy40760-practicals-2026.git
+```
+
+Open the project by double-clicking the `.Rproj` file, then run `renv::restore()` in the R console to install the packages.
+
+### Getting new weeks' materials into your fork
+
+Each week, new materials are added to the original course repository. To pull them into your fork:
+
+1. On your fork's GitHub page, click **Sync fork → Update branch**.
+2. Then, in your terminal, inside the project folder: `git pull`.
+
+## Step 2: Create a new repository for your own work
+
+Your fork is meant to track the *original* course materials, so it's best not to commit your own completed worksheets there — that keeps future updates conflict-free. Instead, create a **separate, new repository** to hold your own work.
+
+1. Go to <https://github.com/new>.
+2. **Repository name:** something clear, e.g. `psy40760-my-work`.
+3. **Visibility:** choose **Private** — this is your coursework.
+4. Leave "Add a README" unchecked (you'll push your existing files).
+5. Click **Create repository**.
+
+GitHub will show a page with setup instructions — keep it open, you'll need the repository URL in Step 3.
+
+## Step 3: Push your work to your new repository
+
+From inside your project folder in the terminal:
+
+```bash
+# Point your local project at your new (submission) repository
+git remote add submission git@github.com:<your-username>/psy40760-my-work.git
+
+# Stage, commit, and push your work
+git add .
+git commit -m "My worksheet solutions"
+git push submission main
+```
+
+Repeat the `git add` / `git commit` / `git push submission main` sequence each time you want to save new progress — e.g. after finishing each week's worksheet.
+
+::: {.callout-note}
+If `git push` complains about the branch name, run `git status` to check whether your branch is called `main` or `master`, and use that name instead.
+:::
+
+## Step 4: Share your repository with us
+
+Since your submission repository is private, we can't see it until you add us as collaborators.
+
+1. On your new repository's GitHub page, go to **Settings → Collaborators**.
+2. Click **Add people**.
+3. Add both:
+   - `ozika`
+   - `cameron-mccabe`
+4. We'll receive an invitation and get access once we accept.
+
+## Quick reference
+
+| Step | Where | What |
+|---|---|---|
+| Fork | `github.com/ozika/psy40760-practicals-2026` | Click **Fork** |
+| New repo | `github.com/new` | Create a **private** repo for your own work |
+| Push | Terminal | `git add .` → `git commit -m "..."` → `git push submission main` |
+| Share | Repo → **Settings → Collaborators** | Add `ozika` and `cameron-mccabe` |
+
+## Stuck?
+
+Post on the PSY40780 module forum and tag Ondrej or Cameron — Git issues are usually quick to resolve.

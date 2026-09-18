@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-0.9.629">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2026-09-18">
+
+<title>GitHub Cheat Sheet: Fork, Submit, and Share Your Work</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<script src="github-setup_files/libs/clipboard/clipboard.min.js"></script>
+<script src="github-setup_files/libs/quarto-html/quarto.js"></script>
+<script src="github-setup_files/libs/quarto-html/popper.min.js"></script>
+<script src="github-setup_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="github-setup_files/libs/quarto-html/anchor.min.js"></script>
+<link href="github-setup_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="github-setup_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="github-setup_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="github-setup_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="github-setup_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet">
+
+
+</head>
+
+<body>
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+  <nav id="TOC" role="doc-toc">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#who-this-is-for" id="toc-who-this-is-for" class="nav-link active" data-scroll-target="#who-this-is-for">Who this is for</a></li>
+  <li><a href="#what-youll-do" id="toc-what-youll-do" class="nav-link" data-scroll-target="#what-youll-do">What you’ll do</a></li>
+  <li><a href="#step-1-fork-the-course-repository" id="toc-step-1-fork-the-course-repository" class="nav-link" data-scroll-target="#step-1-fork-the-course-repository">Step 1: Fork the course repository</a>
+  <ul class="collapse">
+  <li><a href="#clone-your-fork-to-your-computer" id="toc-clone-your-fork-to-your-computer" class="nav-link" data-scroll-target="#clone-your-fork-to-your-computer">Clone your fork to your computer</a></li>
+  <li><a href="#getting-new-weeks-materials-into-your-fork" id="toc-getting-new-weeks-materials-into-your-fork" class="nav-link" data-scroll-target="#getting-new-weeks-materials-into-your-fork">Getting new weeks’ materials into your fork</a></li>
+  </ul></li>
+  <li><a href="#step-2-create-a-new-repository-for-your-own-work" id="toc-step-2-create-a-new-repository-for-your-own-work" class="nav-link" data-scroll-target="#step-2-create-a-new-repository-for-your-own-work">Step 2: Create a new repository for your own work</a></li>
+  <li><a href="#step-3-push-your-work-to-your-new-repository" id="toc-step-3-push-your-work-to-your-new-repository" class="nav-link" data-scroll-target="#step-3-push-your-work-to-your-new-repository">Step 3: Push your work to your new repository</a></li>
+  <li><a href="#step-4-share-your-repository-with-us" id="toc-step-4-share-your-repository-with-us" class="nav-link" data-scroll-target="#step-4-share-your-repository-with-us">Step 4: Share your repository with us</a></li>
+  <li><a href="#quick-reference" id="toc-quick-reference" class="nav-link" data-scroll-target="#quick-reference">Quick reference</a></li>
+  <li><a href="#stuck" id="toc-stuck" class="nav-link" data-scroll-target="#stuck">Stuck?</a></li>
+  </ul>
+</nav>
+</div>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">GitHub Cheat Sheet: Fork, Submit, and Share Your Work</h1>
+<p class="subtitle lead">PSY40760 — Advanced Data Analysis and Statistics in R (optional, for Git users)</p>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">September 18, 2026</p>
+    </div>
+  </div>
+    
+  </div>
+  
+
+</header>
+
+<section id="who-this-is-for" class="level2">
+<h2 class="anchored" data-anchor-id="who-this-is-for">Who this is for</h2>
+<p>This guide is only for students who chose the <strong>voluntary Git/GitHub path</strong> in the Technical Setup Guide. If you didn’t set up Git, you don’t need this — you’ll download materials and submit worksheets through Brightspace instead, exactly like everyone else.</p>
+<p>You need a free <a href="https://github.com/join">GitHub account</a> and Git installed before starting (both covered in the Technical Setup Guide’s voluntary section).</p>
+</section>
+<section id="what-youll-do" class="level2">
+<h2 class="anchored" data-anchor-id="what-youll-do">What you’ll do</h2>
+<p>By the end of this guide, you’ll have:</p>
+<ol type="1">
+<li><strong>Forked</strong> the course practicals repository, so you have your own copy on GitHub.</li>
+<li><strong>Created a new repository</strong> on GitHub to hold your own completed work.</li>
+<li><strong>Pushed your code</strong> to that new repository.</li>
+<li><strong>Shared</strong> that repository with <code>ozika</code> and <code>cameron-mccabe</code>, so we can see your work.</li>
+</ol>
+</section>
+<section id="step-1-fork-the-course-repository" class="level2">
+<h2 class="anchored" data-anchor-id="step-1-fork-the-course-repository">Step 1: Fork the course repository</h2>
+<p>A <strong>fork</strong> is your own personal copy of a repository on GitHub. Forking the course repo lets you pull down new weeks’ materials as they’re released, without affecting the original.</p>
+<ol type="1">
+<li>Go to <a href="https://github.com/ozika/psy40760-practicals-2026" class="uri">https://github.com/ozika/psy40760-practicals-2026</a>.</li>
+<li>Click <strong>Fork</strong> (top-right corner of the page).</li>
+<li>Leave the settings as they are, and click <strong>Create fork</strong>.</li>
+</ol>
+<p>You now have your own copy at <code>github.com/&lt;your-username&gt;/psy40760-practicals-2026</code>.</p>
+<section id="clone-your-fork-to-your-computer" class="level3">
+<h3 class="anchored" data-anchor-id="clone-your-fork-to-your-computer">Clone your fork to your computer</h3>
+<p>Open a terminal (or the RStudio <strong>Terminal</strong> tab) and run, replacing <code>&lt;your-username&gt;</code> with your actual GitHub username:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> clone git@github.com:<span class="op">&lt;</span>your-username<span class="op">&gt;</span>/psy40760-practicals-2026.git</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Open the project by double-clicking the <code>.Rproj</code> file, then run <code>renv::restore()</code> in the R console to install the packages.</p>
+</section>
+<section id="getting-new-weeks-materials-into-your-fork" class="level3">
+<h3 class="anchored" data-anchor-id="getting-new-weeks-materials-into-your-fork">Getting new weeks’ materials into your fork</h3>
+<p>Each week, new materials are added to the original course repository. To pull them into your fork:</p>
+<ol type="1">
+<li>On your fork’s GitHub page, click <strong>Sync fork → Update branch</strong>.</li>
+<li>Then, in your terminal, inside the project folder: <code>git pull</code>.</li>
+</ol>
+</section>
+</section>
+<section id="step-2-create-a-new-repository-for-your-own-work" class="level2">
+<h2 class="anchored" data-anchor-id="step-2-create-a-new-repository-for-your-own-work">Step 2: Create a new repository for your own work</h2>
+<p>Your fork is meant to track the <em>original</em> course materials, so it’s best not to commit your own completed worksheets there — that keeps future updates conflict-free. Instead, create a <strong>separate, new repository</strong> to hold your own work.</p>
+<ol type="1">
+<li>Go to <a href="https://github.com/new" class="uri">https://github.com/new</a>.</li>
+<li><strong>Repository name:</strong> something clear, e.g.&nbsp;<code>psy40760-my-work</code>.</li>
+<li><strong>Visibility:</strong> choose <strong>Private</strong> — this is your coursework.</li>
+<li>Leave “Add a README” unchecked (you’ll push your existing files).</li>
+<li>Click <strong>Create repository</strong>.</li>
+</ol>
+<p>GitHub will show a page with setup instructions — keep it open, you’ll need the repository URL in Step 3.</p>
+</section>
+<section id="step-3-push-your-work-to-your-new-repository" class="level2">
+<h2 class="anchored" data-anchor-id="step-3-push-your-work-to-your-new-repository">Step 3: Push your work to your new repository</h2>
+<p>From inside your project folder in the terminal:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Point your local project at your new (submission) repository</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> remote add submission git@github.com:<span class="op">&lt;</span>your-username<span class="op">&gt;</span>/psy40760-my-work.git</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Stage, commit, and push your work</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> add .</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> commit <span class="at">-m</span> <span class="st">"My worksheet solutions"</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> push submission main</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Repeat the <code>git add</code> / <code>git commit</code> / <code>git push submission main</code> sequence each time you want to save new progress — e.g.&nbsp;after finishing each week’s worksheet.</p>
+<div class="callout-note callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>If <code>git push</code> complains about the branch name, run <code>git status</code> to check whether your branch is called <code>main</code> or <code>master</code>, and use that name instead.</p>
+</div>
+</div>
+</section>
+<section id="step-4-share-your-repository-with-us" class="level2">
+<h2 class="anchored" data-anchor-id="step-4-share-your-repository-with-us">Step 4: Share your repository with us</h2>
+<p>Since your submission repository is private, we can’t see it until you add us as collaborators.</p>
+<ol type="1">
+<li>On your new repository’s GitHub page, go to <strong>Settings → Collaborators</strong>.</li>
+<li>Click <strong>Add people</strong>.</li>
+<li>Add both:
+<ul>
+<li><code>ozika</code></li>
+<li><code>cameron-mccabe</code></li>
+</ul></li>
+<li>We’ll receive an invitation and get access once we accept.</li>
+</ol>
+</section>
+<section id="quick-reference" class="level2">
+<h2 class="anchored" data-anchor-id="quick-reference">Quick reference</h2>
+<table class="table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Step</th>
+<th>Where</th>
+<th>What</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Fork</td>
+<td><code>github.com/ozika/psy40760-practicals-2026</code></td>
+<td>Click <strong>Fork</strong></td>
+</tr>
+<tr class="even">
+<td>New repo</td>
+<td><code>github.com/new</code></td>
+<td>Create a <strong>private</strong> repo for your own work</td>
+</tr>
+<tr class="odd">
+<td>Push</td>
+<td>Terminal</td>
+<td><code>git add .</code> → <code>git commit -m "..."</code> → <code>git push submission main</code></td>
+</tr>
+<tr class="even">
+<td>Share</td>
+<td>Repo → <strong>Settings → Collaborators</strong></td>
+<td>Add <code>ozika</code> and <code>cameron-mccabe</code></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="stuck" class="level2">
+<h2 class="anchored" data-anchor-id="stuck">Stuck?</h2>
+<p>Post on the PSY40780 module forum and tag Ondrej or Cameron — Git issues are usually quick to resolve.</p>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
