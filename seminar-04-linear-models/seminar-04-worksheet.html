@@ -1,0 +1,1565 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.27">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2026-11-11">
+
+<title>Seminar 4 — The Linear Model</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="seminar-04-worksheet_files/libs/clipboard/clipboard.min.js"></script>
+<script src="seminar-04-worksheet_files/libs/quarto-html/quarto.js" type="module"></script>
+<script src="seminar-04-worksheet_files/libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="seminar-04-worksheet_files/libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="seminar-04-worksheet_files/libs/quarto-html/popper.min.js"></script>
+<script src="seminar-04-worksheet_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="seminar-04-worksheet_files/libs/quarto-html/anchor.min.js"></script>
+<link href="seminar-04-worksheet_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="seminar-04-worksheet_files/libs/quarto-html/quarto-syntax-highlighting-ed96de9b727972fe78a7b5d16c58bf87.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="seminar-04-worksheet_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="seminar-04-worksheet_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="seminar-04-worksheet_files/libs/bootstrap/bootstrap-d6a003b94517c951b2d65075d42fb01b.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+
+
+</head>
+
+<body class="quarto-light">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+  <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#worksheet-4" id="toc-worksheet-4" class="nav-link active" data-scroll-target="#worksheet-4">Worksheet 4</a>
+  <ul>
+  <li><a href="#session-at-a-glance" id="toc-session-at-a-glance" class="nav-link" data-scroll-target="#session-at-a-glance">Session at a glance</a></li>
+  <li><a href="#before-you-arrive" id="toc-before-you-arrive" class="nav-link" data-scroll-target="#before-you-arrive">Before you arrive</a>
+  <ul class="collapse">
+  <li><a href="#environment" id="toc-environment" class="nav-link" data-scroll-target="#environment">1. Environment</a></li>
+  <li><a href="#reading" id="toc-reading" class="nav-link" data-scroll-target="#reading">2. Reading</a></li>
+  </ul></li>
+  <li><a href="#part-1" id="toc-part-1" class="nav-link" data-scroll-target="#part-1">Part 1</a>
+  <ul class="collapse">
+  <li><a href="#load-the-packages-and-the-data" id="toc-load-the-packages-and-the-data" class="nav-link" data-scroll-target="#load-the-packages-and-the-data">1.0 Load the packages and the data</a></li>
+  <li><a href="#the-equation-of-a-line" id="toc-the-equation-of-a-line" class="nav-link" data-scroll-target="#the-equation-of-a-line">1.1 The equation of a line</a></li>
+  <li><a href="#the-simplest-model-the-mean-of-y-axis-also-known-as-the-null-model" id="toc-the-simplest-model-the-mean-of-y-axis-also-known-as-the-null-model" class="nav-link" data-scroll-target="#the-simplest-model-the-mean-of-y-axis-also-known-as-the-null-model">1.2 The simplest model: the mean of y axis (also known as the “null” model)</a></li>
+  <li><a href="#a-better-model-a-straight-line" id="toc-a-better-model-a-straight-line" class="nav-link" data-scroll-target="#a-better-model-a-straight-line">1.3 A better model: a straight line</a></li>
+  <li><a href="#least-squares-step-by-step" id="toc-least-squares-step-by-step" class="nav-link" data-scroll-target="#least-squares-step-by-step">1.4 Least squares, step by step</a></li>
+  <li><a href="#how-good-is-the-line-r²" id="toc-how-good-is-the-line-r²" class="nav-link" data-scroll-target="#how-good-is-the-line-r²">1.5 How good is the line? R²</a></li>
+  <li><a href="#a-95-ci-for-the-slope" id="toc-a-95-ci-for-the-slope" class="nav-link" data-scroll-target="#a-95-ci-for-the-slope">1.6 A 95% CI for the slope</a></li>
+  <li><a href="#from-the-slope-to-a-p-value-then-summary" id="toc-from-the-slope-to-a-p-value-then-summary" class="nav-link" data-scroll-target="#from-the-slope-to-a-p-value-then-summary">1.7 From the slope to a p-value, then <code>summary()</code></a></li>
+  <li><a href="#group-as-a-predictor-dummy-coding" id="toc-group-as-a-predictor-dummy-coding" class="nav-link" data-scroll-target="#group-as-a-predictor-dummy-coding">1.8 Group as a predictor: dummy coding</a></li>
+  <li><a href="#which-diets-differ-post-hoc-tests" id="toc-which-diets-differ-post-hoc-tests" class="nav-link" data-scroll-target="#which-diets-differ-post-hoc-tests">1.9 Which diets differ? Post-hoc tests</a></li>
+  <li><a href="#two-predictors-multiple-regression-and-centring" id="toc-two-predictors-multiple-regression-and-centring" class="nav-link" data-scroll-target="#two-predictors-multiple-regression-and-centring">1.10 Two predictors: multiple regression and centring</a></li>
+  <li><a href="#what-to-adjust-for-a-collider-simulated" id="toc-what-to-adjust-for-a-collider-simulated" class="nav-link" data-scroll-target="#what-to-adjust-for-a-collider-simulated">1.11 What to adjust for: a collider, simulated</a></li>
+  <li><a href="#checking-the-model" id="toc-checking-the-model" class="nav-link" data-scroll-target="#checking-the-model">1.12 Checking the model</a></li>
+  <li><a href="#reporting-an-lm-result" id="toc-reporting-an-lm-result" class="nav-link" data-scroll-target="#reporting-an-lm-result">1.13 Reporting an <code>lm()</code> result</a></li>
+  </ul></li>
+  <li><a href="#part-2-datacamp" id="toc-part-2-datacamp" class="nav-link" data-scroll-target="#part-2-datacamp">Part 2: DataCamp</a></li>
+  <li><a href="#part-3-exercises-in-rstudio" id="toc-part-3-exercises-in-rstudio" class="nav-link" data-scroll-target="#part-3-exercises-in-rstudio">Part 3: Exercises in RStudio</a>
+  <ul class="collapse">
+  <li><a href="#exercise-1-first-look-mirrors-1.0" id="toc-exercise-1-first-look-mirrors-1.0" class="nav-link" data-scroll-target="#exercise-1-first-look-mirrors-1.0">Exercise 1 — First look [mirrors 1.0]</a></li>
+  <li><a href="#exercise-2-the-mean-as-a-model-mirrors-1.2" id="toc-exercise-2-the-mean-as-a-model-mirrors-1.2" class="nav-link" data-scroll-target="#exercise-2-the-mean-as-a-model-mirrors-1.2">Exercise 2 — The mean as a model [mirrors 1.2]</a></li>
+  <li><a href="#exercise-3-a-line-mirrors-1.3" id="toc-exercise-3-a-line-mirrors-1.3" class="nav-link" data-scroll-target="#exercise-3-a-line-mirrors-1.3">Exercise 3 — A line [mirrors 1.3]</a></li>
+  <li><a href="#exercise-4-least-squares-by-hand-mirrors-1.4" id="toc-exercise-4-least-squares-by-hand-mirrors-1.4" class="nav-link" data-scroll-target="#exercise-4-least-squares-by-hand-mirrors-1.4">Exercise 4 — Least squares by hand [mirrors 1.4]</a></li>
+  <li><a href="#exercise-5-r²-mirrors-1.5" id="toc-exercise-5-r²-mirrors-1.5" class="nav-link" data-scroll-target="#exercise-5-r²-mirrors-1.5">Exercise 5 — R² [mirrors 1.5]</a></li>
+  <li><a href="#exercise-6-ci-and-p-value-of-the-slope-mirrors-1.61.7" id="toc-exercise-6-ci-and-p-value-of-the-slope-mirrors-1.61.7" class="nav-link" data-scroll-target="#exercise-6-ci-and-p-value-of-the-slope-mirrors-1.61.7">Exercise 6 — CI and p-value of the slope [mirrors 1.6–1.7]</a></li>
+  <li><a href="#exercise-7-dose-as-a-predictor-mirrors-1.8" id="toc-exercise-7-dose-as-a-predictor-mirrors-1.8" class="nav-link" data-scroll-target="#exercise-7-dose-as-a-predictor-mirrors-1.8">Exercise 7 — Dose as a predictor [mirrors 1.8]</a></li>
+  <li><a href="#exercise-8-which-doses-differ-mirrors-1.9" id="toc-exercise-8-which-doses-differ-mirrors-1.9" class="nav-link" data-scroll-target="#exercise-8-which-doses-differ-mirrors-1.9">Exercise 8 — Which doses differ? [mirrors 1.9]</a></li>
+  <li><a href="#exercise-9-two-predictors-and-centring-mirrors-1.10" id="toc-exercise-9-two-predictors-and-centring-mirrors-1.10" class="nav-link" data-scroll-target="#exercise-9-two-predictors-and-centring-mirrors-1.10">Exercise 9 — Two predictors and centring [mirrors 1.10]</a></li>
+  <li><a href="#exercise-10-diagnostics-mirrors-1.12" id="toc-exercise-10-diagnostics-mirrors-1.12" class="nav-link" data-scroll-target="#exercise-10-diagnostics-mirrors-1.12">Exercise 10 — Diagnostics [mirrors 1.12]</a></li>
+  <li><a href="#exercise-11-report-it-mirrors-1.13" id="toc-exercise-11-report-it-mirrors-1.13" class="nav-link" data-scroll-target="#exercise-11-report-it-mirrors-1.13">Exercise 11 — Report it [mirrors 1.13]</a></li>
+  </ul></li>
+  <li><a href="#extra-optional" id="toc-extra-optional" class="nav-link" data-scroll-target="#extra-optional">Extra (optional)</a></li>
+  <li><a href="#where-to-get-help" id="toc-where-to-get-help" class="nav-link" data-scroll-target="#where-to-get-help">Where to get help</a></li>
+  </ul></li>
+  </ul>
+</nav>
+</div>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Seminar 4 — The Linear Model</h1>
+<p class="subtitle lead">PSY40760 Advanced Data Analysis and Statistics in R</p>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">November 11, 2026</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="worksheet-4" class="level1">
+<h1>Worksheet 4</h1>
+<blockquote class="blockquote">
+<p><em>Running example: the 12-week weight-loss trial from Seminars 2–3. Trial A has 48 participants (24 per group); each row is one person, with their group, sex, age, starting weight (<code>baseline_kg</code>) and weight lost (<code>loss_kg</code>).</em></p>
+</blockquote>
+<section id="session-at-a-glance" class="level2">
+<h2 class="anchored" data-anchor-id="session-at-a-glance">Session at a glance</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<tbody>
+<tr class="odd">
+<td><strong>Date</strong></td>
+<td>Wednesday 11 November 2026</td>
+</tr>
+<tr class="even">
+<td><strong>Room</strong></td>
+<td>QUI-115</td>
+</tr>
+<tr class="odd">
+<td><strong>Time</strong></td>
+<td>170 min</td>
+</tr>
+<tr class="even">
+<td><strong>Staff</strong></td>
+<td>Dr Ondrej Zika, Cameron McCabe</td>
+</tr>
+<tr class="odd">
+<td><strong>Theory</strong></td>
+<td>the equation of a line; data = model + error; least squares and R²; the CI and p-value of a slope; categorical predictors and dummy coding; post-hoc tests and multiple comparisons; multiple regression and centring; what to adjust for; checking and reporting <code>lm()</code></td>
+</tr>
+<tr class="even">
+<td><strong>Practical</strong></td>
+<td>The practical closely mirrors the lecture.</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="before-you-arrive" class="level2">
+<h2 class="anchored" data-anchor-id="before-you-arrive">Before you arrive</h2>
+<section id="environment" class="level3">
+<h3 class="anchored" data-anchor-id="environment">1. Environment</h3>
+<p><strong>Get this week’s files: download them, do not clone the repository.</strong> Inside your existing course folder <code>psy40760-practicals-2026</code>, create a folder called <code>seminar-04-linear-models</code> (exact name). From <a href="https://github.com/ozika/psy40760-practicals-2026/tree/main/seminar-04-linear-models">GitHub</a>, download <code>seminar-04-worksheet.qmd</code> and the folder <code>seminar-04-worksheet_files</code> (with all its files) into it, keeping the same structure:</p>
+<pre><code>psy40760-practicals-2026/
+├── .root-practicals
+├── renv.lock
+├── ...
+└── seminar-04-linear-models/
+    ├── seminar-04-worksheet.qmd
+    └── seminar-04-worksheet_files/</code></pre>
+<p>Do <strong>not</strong> download or clone the whole repository again: that would overwrite your earlier worksheets and your <code>renv</code> set-up. (Only if you cloned the repository with git in the first week: run <code>git pull</code> instead.)</p>
+<p>Use the same course folder as in previous weeks (<code>here</code> + <code>renv</code>, see the <a href="https://github.com/ozika/psy40760-practicals-2026/blob/main/environment-setup/environment-setup.pdf">environment set-up guide</a>). <code>lm()</code>, <code>confint()</code> and <code>t.test()</code> are part of base R, and <code>dplyr</code> and <code>ggplot2</code> are already installed. This week adds one package, <code>emmeans</code>, for post-hoc tests:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>renv<span class="sc">::</span><span class="fu">install</span>(<span class="st">"emmeans"</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>renv<span class="sc">::</span><span class="fu">snapshot</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="reading" class="level3">
+<h3 class="anchored" data-anchor-id="reading">2. Reading</h3>
+<table class="caption-top table">
+<tbody>
+<tr class="odd">
+<td><strong>Theory</strong></td>
+<td>Baker (2022), <em>Research Methods Using R</em>, Ch. 4: Statistical tests as linear models</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>Poldrack, <em>Statistical Thinking for the 21st Century</em>, <a href="https://statsthinking21.github.io/statsthinking21-core-site/fitting-models.html">Ch. 5: Fitting models to data</a> and <a href="https://statsthinking21.github.io/statsthinking21-core-site/the-general-linear-model.html">Ch. 14: The general linear model</a></td>
+</tr>
+</tbody>
+</table>
+<hr>
+</section>
+</section>
+<section id="part-1" class="level2">
+<h2 class="anchored" data-anchor-id="part-1">Part 1</h2>
+<p>Run each chunk as we go. Every subsection follows a step of the theory block. Notation is the same as on the slides: β0 is the intercept, β1 the slope, and <code>*</code> means “multiplied by”.</p>
+<section id="load-the-packages-and-the-data" class="level4">
+<h4 class="anchored" data-anchor-id="load-the-packages-and-the-data">1.0 Load the packages and the data</h4>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(here)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>here<span class="sc">::</span><span class="fu">i_am</span>(<span class="st">".root-practicals"</span>)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(renv)</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>renv<span class="sc">::</span><span class="fu">load</span>(here<span class="sc">::</span><span class="fu">here</span>())</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>- The project is out-of-sync -- use `renv::status()` for details.</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(emmeans)</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>trial_A_data <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"seminar-04-linear-models"</span>, <span class="st">"seminar-04-worksheet_files"</span>, <span class="st">"trial_a.csv"</span>))</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>trial_A_data <span class="ot">&lt;-</span> trial_A_data <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">group =</span> <span class="fu">factor</span>(group, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"control"</span>, <span class="st">"programme"</span>)))</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>trial_A_data <span class="sc">%&gt;%</span> <span class="fu">glimpse</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 48
+Columns: 6
+$ id          &lt;chr&gt; "P01", "P02", "P03", "P04", "P05", "P06", "P07", "P08", "P…
+$ group       &lt;fct&gt; control, control, control, control, control, control, cont…
+$ sex         &lt;chr&gt; "female", "female", "female", "male", "female", "female", …
+$ age         &lt;int&gt; 43, 33, 59, 47, 59, 56, 43, 50, 51, 27, 59, 32, 35, 56, 45…
+$ baseline_kg &lt;dbl&gt; 105.6, 101.1, 82.0, 93.5, 84.8, 101.4, 88.3, 93.2, 81.2, 8…
+$ loss_kg     &lt;dbl&gt; 1.4, 2.2, -5.6, 3.9, 5.2, 2.3, -0.1, -2.7, 3.3, 2.3, -3.4,…</code></pre>
+</div>
+</div>
+<p>A quick reminder of the data: weight lost in each group, with the group means.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>trial_A_data <span class="sc">%&gt;%</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(group) <span class="sc">%&gt;%</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">n =</span> <span class="fu">n</span>(), <span class="at">mean_loss =</span> <span class="fu">mean</span>(loss_kg), <span class="at">sd_loss =</span> <span class="fu">sd</span>(loss_kg))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2 × 4
+  group         n mean_loss sd_loss
+  &lt;fct&gt;     &lt;int&gt;     &lt;dbl&gt;   &lt;dbl&gt;
+1 control      24      1.00    5.00
+2 programme    24      5.37    5.00</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(trial_A_data, <span class="fu">aes</span>(<span class="at">x =</span> group, <span class="at">y =</span> loss_kg)) <span class="sc">+</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_jitter</span>(<span class="at">width =</span> <span class="fl">0.1</span>, <span class="at">alpha =</span> <span class="fl">0.6</span>) <span class="sc">+</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_summary</span>(<span class="at">fun =</span> mean, <span class="at">geom =</span> <span class="st">"crossbar"</span>, <span class="at">width =</span> <span class="fl">0.4</span>, <span class="at">colour =</span> <span class="st">"#C2185B"</span>) <span class="sc">+</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="cn">NULL</span>, <span class="at">y =</span> <span class="st">"Weight lost (kg)"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="seminar-04-worksheet_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p><strong>Check:</strong> which group lost more weight on average, and by roughly how much?</p>
+</section>
+<section id="the-equation-of-a-line" class="level4">
+<h4 class="anchored" data-anchor-id="the-equation-of-a-line">1.1 The equation of a line</h4>
+<p>A line is <code>y = β0 + β1 * x</code>. Pick any β0 and β1 and you can predict y for any x. Try it by hand for three people:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>beta0 <span class="ot">&lt;-</span> <span class="dv">2</span>      <span class="co"># where the line crosses x = 0</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>beta1 <span class="ot">&lt;-</span> <span class="fl">0.5</span>    <span class="co"># how much y goes up when x goes up by 1</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>x_values <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">10</span>, <span class="dv">1</span>)</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>beta0 <span class="sc">+</span> beta1 <span class="sc">*</span> x_values</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] 2.0 2.5 3.0 3.5 4.0 4.5 5.0 5.5 6.0 6.5 7.0</code></pre>
+</div>
+</div>
+<p><strong>Check:</strong> what is the prediction at x = 0? Change <code>beta1</code> to <code>-0.5</code> and run it again: what changes?</p>
+</section>
+<section id="the-simplest-model-the-mean-of-y-axis-also-known-as-the-null-model" class="level4">
+<h4 class="anchored" data-anchor-id="the-simplest-model-the-mean-of-y-axis-also-known-as-the-null-model">1.2 The simplest model: the mean of y axis (also known as the “null” model)</h4>
+<p>A model makes a prediction for every person. The simplest one predicts the same value for everybody: the mean. The gap between what we observed and what the model predicted is the <strong>residual</strong> (data = model + error).</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>mean_loss <span class="ot">&lt;-</span> <span class="fu">mean</span>(trial_A_data<span class="sc">$</span>loss_kg)</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>mean_loss</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 3.185417</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>residuals_mean <span class="ot">&lt;-</span> trial_A_data<span class="sc">$</span>loss_kg <span class="sc">-</span> mean_loss   <span class="co"># observed - predicted</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(residuals_mean)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] -1.7854167 -0.9854167 -8.7854167  0.7145833  2.0145833 -0.8854167</code></pre>
+</div>
+</div>
+<p>To get one number for how much the model misses overall, square each residual (so that negatives do not cancel positives) and add them up: the <strong>sum of squared residuals</strong>, SSE.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>sse_mean <span class="ot">&lt;-</span> <span class="fu">sum</span>(residuals_mean<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>sse_mean</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1376.74</code></pre>
+</div>
+</div>
+<p><strong>Other ways to summarise the misses.</strong> SSE is in squared kg and grows with the number of people, so it is hard to read on its own. Two common alternatives:</p>
+<ul>
+<li><strong>RMSE</strong> (root mean squared error): average the squared residuals, then take the square root. This brings it back to kg: roughly the typical size of a miss. It still squares the residuals, so large misses still count much more than small ones, and it always ranks models in the same order as SSE.</li>
+<li><strong>MAE</strong> (mean absolute error): average the absolute residuals, with no squaring. A miss twice as large counts only twice as much, so large errors are penalised <strong>less</strong> than in SSE or RMSE.</li>
+</ul>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>rmse_mean <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="fu">mean</span>(residuals_mean<span class="sc">^</span><span class="dv">2</span>))   <span class="co"># root mean squared error, in kg</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>rmse_mean</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 5.355565</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>mae_mean <span class="ot">&lt;-</span> <span class="fu">mean</span>(<span class="fu">abs</span>(residuals_mean))       <span class="co"># mean absolute error, in kg</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>mae_mean</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 4.284809</code></pre>
+</div>
+</div>
+<p><strong>Check:</strong> which is larger, RMSE or MAE? Why does squaring make it so? (In this course we stay with SSE: it is what <code>lm()</code> minimises.)</p>
+<p><code>lm()</code> fits the same model if you give it no predictor, only an intercept (<code>~ 1</code>):</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>m0 <span class="ot">&lt;-</span> <span class="fu">lm</span>(loss_kg <span class="sc">~</span> <span class="dv">1</span>, <span class="at">data =</span> trial_A_data)</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="fu">coef</span>(m0)               <span class="co"># the intercept is the mean</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>(Intercept) 
+   3.185417 </code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(<span class="fu">residuals</span>(m0)<span class="sc">^</span><span class="dv">2</span>)   <span class="co"># the same SSE</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1376.74</code></pre>
+</div>
+</div>
+<p><strong>Check:</strong> is <code>coef(m0)</code> the same as <code>mean_loss</code>?</p>
+</section>
+<section id="a-better-model-a-straight-line" class="level4">
+<h4 class="anchored" data-anchor-id="a-better-model-a-straight-line">1.3 A better model: a straight line</h4>
+<p>Now let starting weight predict weight loss: <code>loss = β0 + β1 * baseline + ε</code>. The formula <code>loss_kg ~ baseline_kg</code> reads “loss is predicted by baseline weight”; R adds the intercept for you.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>m1 <span class="ot">&lt;-</span> <span class="fu">lm</span>(loss_kg <span class="sc">~</span> baseline_kg, <span class="at">data =</span> trial_A_data)</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="fu">coef</span>(m1)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>(Intercept) baseline_kg 
+-14.1123892   0.1880196 </code></pre>
+</div>
+</div>
+<ul>
+<li>β1 (<code>baseline_kg</code>) is the extra weight lost for each extra kg of starting weight.</li>
+<li>β0 (<code>(Intercept)</code>) is the prediction for someone who weighs 0 kg. That makes no sense here; we fix it with centring in 1.9.</li>
+</ul>
+<p>Plot the data and the fitted line:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(trial_A_data, <span class="fu">aes</span>(<span class="at">x =</span> baseline_kg, <span class="at">y =</span> loss_kg)) <span class="sc">+</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>, <span class="at">se =</span> <span class="cn">FALSE</span>, <span class="at">colour =</span> <span class="st">"#C2185B"</span>) <span class="sc">+</span></span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Starting weight (kg)"</span>, <span class="at">y =</span> <span class="st">"Weight lost (kg)"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>`geom_smooth()` using formula = 'y ~ x'</code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="seminar-04-worksheet_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p><strong>Check:</strong> complete the sentence: “For every extra 10 kg of starting weight, people lost about ___ kg more.”</p>
+<p><strong>Your turn.</strong> What weight loss does this line predict for someone who starts at <strong>2,000 kg</strong>? Then plot it: the data, the fitted line extended all the way to 2,000 kg, and the predicted point. No code is given this time. Hints: use the two numbers from <code>coef(m1)</code> (β0 + β1 * 2000), or <code>predict()</code> with <code>newdata</code>; <code>geom_abline()</code> draws a line across the whole plot, and <code>xlim()</code> / <code>ylim()</code> widen the axes.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co"># your code here</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p><strong>Check:</strong> is the prediction believable? The data cover starting weights of about 67 to 120 kg only. What does this tell you about using a fitted line outside the range of the data?</p>
+</section>
+<section id="least-squares-step-by-step" class="level4">
+<h4 class="anchored" data-anchor-id="least-squares-step-by-step">1.4 Least squares, step by step</h4>
+<p>Least squares picks the line with the smallest SSE. Let’s do it by hand. Step 1: one candidate line, with slope 0.50 through the two means. For each person: prediction, residual, squared residual.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> trial_A_data<span class="sc">$</span>baseline_kg</span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> trial_A_data<span class="sc">$</span>loss_kg</span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>slope_try     <span class="ot">&lt;-</span> <span class="fl">0.50</span></span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>intercept_try <span class="ot">&lt;-</span> <span class="fu">mean</span>(y) <span class="sc">-</span> slope_try <span class="sc">*</span> <span class="fu">mean</span>(x)   <span class="co"># makes the line pass through the two means</span></span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a>by_hand <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">x =</span> x, <span class="at">y =</span> y) <span class="sc">%&gt;%</span></span>
+<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">y_hat =</span> intercept_try <span class="sc">+</span> slope_try <span class="sc">*</span> x,  <span class="co"># prediction</span></span>
+<span id="cb31-9"><a href="#cb31-9" aria-hidden="true" tabindex="-1"></a>         <span class="at">e     =</span> y <span class="sc">-</span> y_hat,                      <span class="co"># residual</span></span>
+<span id="cb31-10"><a href="#cb31-10" aria-hidden="true" tabindex="-1"></a>         <span class="at">e_sq  =</span> e<span class="sc">^</span><span class="dv">2</span>)                            <span class="co"># squared residual</span></span>
+<span id="cb31-11"><a href="#cb31-11" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(by_hand, <span class="dv">5</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>      x    y      y_hat           e        e_sq
+1 105.6  1.4  9.9854167 -8.58541667 73.70937934
+2 101.1  2.2  7.7354167 -5.53541667 30.64083767
+3  82.0 -5.6 -1.8145833 -3.78541667 14.32937934
+4  93.5  3.9  3.9354167 -0.03541667  0.00125434
+5  84.8  5.2 -0.4145833  5.61458333 31.52354601</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(by_hand<span class="sc">$</span>e_sq)   <span class="co"># SSE of this line</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1817.025</code></pre>
+</div>
+</div>
+<p>Step 2: put the same recipe in a function, so that we can score any slope.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>sse_for_slope <span class="ot">&lt;-</span> <span class="cf">function</span>(slope) {</span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>  intercept <span class="ot">&lt;-</span> <span class="fu">mean</span>(y) <span class="sc">-</span> slope <span class="sc">*</span> <span class="fu">mean</span>(x)</span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sum</span>((y <span class="sc">-</span> (intercept <span class="sc">+</span> slope <span class="sc">*</span> x))<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a><span class="fu">sse_for_slope</span>(<span class="fl">0.50</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1817.025</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sse_for_slope</span>(<span class="fl">0.10</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1180.652</code></pre>
+</div>
+</div>
+<p><strong>Check:</strong> which of the two slopes gives the better line?</p>
+<p><strong>Your turn.</strong> Plot the data with both candidate lines, slope 0.50 and slope 0.10, each passing through the two means. Does the line with the smaller SSE also look like the better fit? No code is given. Hints: compute each intercept as in Step 1, then add one <code>geom_abline()</code> per line to the scatter plot from 1.3, in two different colours.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="co"># your code here</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Step 3: score many slopes and plot them. The SSEs trace a U, and least squares picks the bottom.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>sweep <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">slope =</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="fl">0.3</span>, <span class="fl">0.7</span>, <span class="at">by =</span> <span class="fl">0.01</span>))</span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>sweep<span class="sc">$</span>sse <span class="ot">&lt;-</span> <span class="fu">sapply</span>(sweep<span class="sc">$</span>slope, sse_for_slope)</span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(sweep, <span class="fu">aes</span>(<span class="at">x =</span> slope, <span class="at">y =</span> sse)) <span class="sc">+</span></span>
+<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb40-6"><a href="#cb40-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Slope β1"</span>, <span class="at">y =</span> <span class="st">"SSE"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="seminar-04-worksheet_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>sweep[<span class="fu">which.min</span>(sweep<span class="sc">$</span>sse), ]   <span class="co"># the bottom of the U</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   slope      sse
+50  0.19 1125.645</code></pre>
+</div>
+</div>
+<p>Step 4: the bottom has a formula, <code>β1 = cov(x, y) / var(x)</code> and <code>β0 = mean(y) - β1 * mean(x)</code>.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>beta1 <span class="ot">&lt;-</span> <span class="fu">cov</span>(x, y) <span class="sc">/</span> <span class="fu">var</span>(x)</span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>beta0 <span class="ot">&lt;-</span> <span class="fu">mean</span>(y) <span class="sc">-</span> beta1 <span class="sc">*</span> <span class="fu">mean</span>(x)</span>
+<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="at">beta0 =</span> beta0, <span class="at">beta1 =</span> beta1)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>      beta0       beta1 
+-14.1123892   0.1880196 </code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="fu">coef</span>(m1)   <span class="co"># identical</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>(Intercept) baseline_kg 
+-14.1123892   0.1880196 </code></pre>
+</div>
+</div>
+<p>You can also explore this in the <a href="https://ozika.github.io/2026-advanced-stats-mscbn-PSY40760/least-squares/">least-squares explorer</a>.</p>
+</section>
+<section id="how-good-is-the-line-r²" class="level4">
+<h4 class="anchored" data-anchor-id="how-good-is-the-line-r²">1.5 How good is the line? R²</h4>
+<p>R² compares the SSE of the line with the SSE of the mean: the share of the variation that the line explains.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>sse_line <span class="ot">&lt;-</span> <span class="fu">sum</span>(<span class="fu">residuals</span>(m1)<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a>sse_line</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1125.617</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span> <span class="sc">-</span> sse_line <span class="sc">/</span> sse_mean   <span class="co"># R-squared</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.182404</code></pre>
+</div>
+</div>
+<p><strong>Check:</strong> in words, what share of the differences in weight loss does starting weight explain?</p>
+</section>
+<section id="a-95-ci-for-the-slope" class="level4">
+<h4 class="anchored" data-anchor-id="a-95-ci-for-the-slope">1.6 A 95% CI for the slope</h4>
+<p>Another sample would give another line, so the slope has a standard error (SE). The CI uses the recipe from Seminar 2: estimate ± t_crit * SE, with <code>n - 2</code> degrees of freedom because the line has two parameters.</p>
+<p>Where does the SE come from? It is the noise around the line, s_e, divided by how spread out starting weight is. Compute both parts by hand:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a>s_e <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(sse_line <span class="sc">/</span> (<span class="fu">nrow</span>(trial_A_data) <span class="sc">-</span> <span class="dv">2</span>))   <span class="co"># typical distance of a point from the line</span></span>
+<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a>spread_x <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="fu">sum</span>((x <span class="sc">-</span> <span class="fu">mean</span>(x))<span class="sc">^</span><span class="dv">2</span>))             <span class="co"># grows with the spread of x and with n</span></span>
+<span id="cb51-3"><a href="#cb51-3" aria-hidden="true" tabindex="-1"></a>s_e <span class="sc">/</span> spread_x                                     <span class="co"># the SE of the slope</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.05869168</code></pre>
+</div>
+</div>
+<p><strong>Check:</strong> what would happen to the SE if everyone had a similar starting weight?</p>
+<p><code>summary()</code> gives the same number:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a>se_beta1 <span class="ot">&lt;-</span> <span class="fu">summary</span>(m1)<span class="sc">$</span>coefficients[<span class="st">"baseline_kg"</span>, <span class="st">"Std. Error"</span>]</span>
+<span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a>se_beta1</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.05869168</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb55"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a>df     <span class="ot">&lt;-</span> <span class="fu">nrow</span>(trial_A_data) <span class="sc">-</span> <span class="dv">2</span></span>
+<span id="cb55-2"><a href="#cb55-2" aria-hidden="true" tabindex="-1"></a>t_crit <span class="ot">&lt;-</span> <span class="fu">qt</span>(<span class="fl">0.975</span>, df)</span>
+<span id="cb55-3"><a href="#cb55-3" aria-hidden="true" tabindex="-1"></a>t_crit</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 2.012896</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb57"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="at">lower =</span> beta1 <span class="sc">-</span> t_crit <span class="sc">*</span> se_beta1, <span class="at">upper =</span> beta1 <span class="sc">+</span> t_crit <span class="sc">*</span> se_beta1)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>    lower     upper 
+0.0698794 0.3061599 </code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb59"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a><span class="fu">confint</span>(m1)   <span class="co"># the same, for every coefficient</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                  2.5 %     97.5 %
+(Intercept) -25.0758990 -3.1488794
+baseline_kg   0.0698794  0.3061599</code></pre>
+</div>
+</div>
+<p><strong>Check:</strong> does the CI include 0?</p>
+</section>
+<section id="from-the-slope-to-a-p-value-then-summary" class="level4">
+<h4 class="anchored" data-anchor-id="from-the-slope-to-a-p-value-then-summary">1.7 From the slope to a p-value, then <code>summary()</code></h4>
+<p>Under H0 the true slope is 0. t counts how many SEs our estimate is away from 0; the p-value is the probability of a t at least that far from 0, in either direction, if H0 were true.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb61"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb61-1"><a href="#cb61-1" aria-hidden="true" tabindex="-1"></a>t_value <span class="ot">&lt;-</span> beta1 <span class="sc">/</span> se_beta1</span>
+<span id="cb61-2"><a href="#cb61-2" aria-hidden="true" tabindex="-1"></a>t_value</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 3.203514</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb63"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb63-1"><a href="#cb63-1" aria-hidden="true" tabindex="-1"></a><span class="dv">2</span> <span class="sc">*</span> <span class="fu">pt</span>(<span class="sc">-</span><span class="fu">abs</span>(t_value), df)   <span class="co"># two tails of the t distribution with n - 2 df</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.002466411</code></pre>
+</div>
+</div>
+<p><code>summary()</code> reports all of this at once:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb65"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb65-1"><a href="#cb65-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(m1)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = loss_kg ~ baseline_kg, data = trial_A_data)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-7.6383 -4.2556  0.4786  3.0488 10.5562 
+
+Coefficients:
+             Estimate Std. Error t value Pr(&gt;|t|)   
+(Intercept) -14.11239    5.44664  -2.591  0.01278 * 
+baseline_kg   0.18802    0.05869   3.204  0.00247 **
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 4.947 on 46 degrees of freedom
+Multiple R-squared:  0.1824,    Adjusted R-squared:  0.1646 
+F-statistic: 10.26 on 1 and 46 DF,  p-value: 0.002466</code></pre>
+</div>
+</div>
+<p>Find each number you computed by hand:</p>
+<ul>
+<li><strong>Estimate</strong>: β0 and β1 (1.4)</li>
+<li><strong>Std. Error</strong>: their SEs (1.6)</li>
+<li><strong>t value</strong>: Estimate / SE (above)</li>
+<li><strong>Pr(&gt;|t|)</strong>: the p-value for H0: β = 0 (above)</li>
+<li><strong>Residual standard error</strong>: the SD of the residuals</li>
+<li><strong>Multiple R-squared</strong>: the R² from 1.5</li>
+</ul>
+</section>
+<section id="group-as-a-predictor-dummy-coding" class="level4">
+<h4 class="anchored" data-anchor-id="group-as-a-predictor-dummy-coding">1.8 Group as a predictor: dummy coding</h4>
+<p>The equation stays <code>loss = β0 + β1 * x + ε</code>, but x is now a 0/1 <strong>dummy</strong>: 1 for programme, 0 for control. Then β0 is the control mean and β1 is the difference, programme − control. Build the dummy by hand:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb67"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb67-1"><a href="#cb67-1" aria-hidden="true" tabindex="-1"></a>trial_A_data <span class="ot">&lt;-</span> trial_A_data <span class="sc">%&gt;%</span></span>
+<span id="cb67-2"><a href="#cb67-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">programme =</span> <span class="fu">ifelse</span>(group <span class="sc">==</span> <span class="st">"programme"</span>, <span class="dv">1</span>, <span class="dv">0</span>))</span>
+<span id="cb67-3"><a href="#cb67-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb67-4"><a href="#cb67-4" aria-hidden="true" tabindex="-1"></a>trial_A_data <span class="sc">%&gt;%</span> <span class="fu">select</span>(group, programme, loss_kg) <span class="sc">%&gt;%</span> <span class="fu">slice</span>(<span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>, <span class="dv">25</span><span class="sc">:</span><span class="dv">27</span>))   <span class="co"># 3 rows from each group</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>      group programme loss_kg
+1   control         0     1.4
+2   control         0     2.2
+3   control         0    -5.6
+4 programme         1    16.5
+5 programme         1    10.1
+6 programme         1     5.9</code></pre>
+</div>
+</div>
+<p>Fit the model and compare its coefficients with the two group means:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb69"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb69-1"><a href="#cb69-1" aria-hidden="true" tabindex="-1"></a>m_dummy <span class="ot">&lt;-</span> <span class="fu">lm</span>(loss_kg <span class="sc">~</span> programme, <span class="at">data =</span> trial_A_data)</span>
+<span id="cb69-2"><a href="#cb69-2" aria-hidden="true" tabindex="-1"></a><span class="fu">coef</span>(m_dummy)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>(Intercept)   programme 
+   1.004167    4.362500 </code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb71"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb71-1"><a href="#cb71-1" aria-hidden="true" tabindex="-1"></a>trial_A_data <span class="sc">%&gt;%</span></span>
+<span id="cb71-2"><a href="#cb71-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(group) <span class="sc">%&gt;%</span></span>
+<span id="cb71-3"><a href="#cb71-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">mean_loss =</span> <span class="fu">mean</span>(loss_kg))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2 × 2
+  group     mean_loss
+  &lt;fct&gt;         &lt;dbl&gt;
+1 control        1.00
+2 programme      5.37</code></pre>
+</div>
+</div>
+<p><strong>Check:</strong> which coefficient equals the control mean? What do you get if you add the two coefficients?</p>
+<p>R builds the dummy for you when the predictor is a factor. The first level (<code>control</code>) is the reference:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb73"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb73-1"><a href="#cb73-1" aria-hidden="true" tabindex="-1"></a>m_group <span class="ot">&lt;-</span> <span class="fu">lm</span>(loss_kg <span class="sc">~</span> group, <span class="at">data =</span> trial_A_data)</span>
+<span id="cb73-2"><a href="#cb73-2" aria-hidden="true" tabindex="-1"></a><span class="fu">coef</span>(m_group)                <span class="co"># same numbers as m_dummy</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   (Intercept) groupprogramme 
+      1.004167       4.362500 </code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb75"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb75-1"><a href="#cb75-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(<span class="fu">model.matrix</span>(m_group))  <span class="co"># the 0/1 column R built</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  (Intercept) groupprogramme
+1           1              0
+2           1              0
+3           1              0
+4           1              0
+5           1              0
+6           1              0</code></pre>
+</div>
+</div>
+<p>The t-test from Seminar 2 is this same model (<code>var.equal = TRUE</code> gives the classic Student’s t-test):</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb77"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb77-1"><a href="#cb77-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(m_group)<span class="sc">$</span>coefficients</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>               Estimate Std. Error   t value    Pr(&gt;|t|)
+(Intercept)    1.004167   1.019894 0.9845794 0.329981247
+groupprogramme 4.362500   1.442348 3.0245822 0.004064669</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb79"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb79-1"><a href="#cb79-1" aria-hidden="true" tabindex="-1"></a><span class="fu">t.test</span>(loss_kg <span class="sc">~</span> group, <span class="at">data =</span> trial_A_data, <span class="at">var.equal =</span> <span class="cn">TRUE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Two Sample t-test
+
+data:  loss_kg by group
+t = -3.0246, df = 46, p-value = 0.004065
+alternative hypothesis: true difference in means between group control and group programme is not equal to 0
+95 percent confidence interval:
+ -7.265796 -1.459204
+sample estimates:
+  mean in group control mean in group programme 
+               1.004167                5.366667 </code></pre>
+</div>
+</div>
+<p>Same t, same df, same p; <code>t.test()</code> only subtracts the groups in the other order.</p>
+<p>To make <code>programme</code> the reference instead, use <code>relevel()</code>. The sign flips; the fit does not change:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb81"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb81-1"><a href="#cb81-1" aria-hidden="true" tabindex="-1"></a><span class="fu">coef</span>(<span class="fu">lm</span>(loss_kg <span class="sc">~</span> <span class="fu">relevel</span>(group, <span class="at">ref =</span> <span class="st">"programme"</span>), <span class="at">data =</span> trial_A_data))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                             (Intercept) 
+                                5.366667 
+relevel(group, ref = "programme")control 
+                               -4.362500 </code></pre>
+</div>
+</div>
+<p><strong>Three groups.</strong> For the next two sections we use the hypothetical three-arm diet trial from the theory block: 20 people on no diet, 20 on low-carb and 20 on low-fat. The data are simulated, so we know how they were made; <code>set.seed(4)</code> gives the same numbers as in the theory block.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb83"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb83-1"><a href="#cb83-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">4</span>)</span>
+<span id="cb83-2"><a href="#cb83-2" aria-hidden="true" tabindex="-1"></a>diet_data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">diet =</span> <span class="fu">factor</span>(<span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">"none"</span>, <span class="st">"low-carb"</span>, <span class="st">"low-fat"</span>), <span class="at">each =</span> <span class="dv">20</span>),</span>
+<span id="cb83-3"><a href="#cb83-3" aria-hidden="true" tabindex="-1"></a>                                      <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"none"</span>, <span class="st">"low-carb"</span>, <span class="st">"low-fat"</span>)))</span>
+<span id="cb83-4"><a href="#cb83-4" aria-hidden="true" tabindex="-1"></a>diet_data<span class="sc">$</span>loss_kg <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">4</span>, <span class="fl">2.5</span>)[<span class="fu">as.integer</span>(diet_data<span class="sc">$</span>diet)] <span class="sc">+</span> <span class="fu">rnorm</span>(<span class="dv">60</span>, <span class="at">mean =</span> <span class="dv">0</span>, <span class="at">sd =</span> <span class="dv">4</span>)</span>
+<span id="cb83-5"><a href="#cb83-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb83-6"><a href="#cb83-6" aria-hidden="true" tabindex="-1"></a>diet_data <span class="sc">%&gt;%</span></span>
+<span id="cb83-7"><a href="#cb83-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(diet) <span class="sc">%&gt;%</span></span>
+<span id="cb83-8"><a href="#cb83-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">n =</span> <span class="fu">n</span>(), <span class="at">mean_loss =</span> <span class="fu">mean</span>(loss_kg))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 3 × 3
+  diet         n mean_loss
+  &lt;fct&gt;    &lt;int&gt;     &lt;dbl&gt;
+1 none        20      2.51
+2 low-carb    20      5.22
+3 low-fat     20      2.48</code></pre>
+</div>
+</div>
+<p>A factor with 3 levels becomes 3 − 1 = 2 dummies. Each coefficient compares one diet with the reference, <code>none</code>:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb85"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb85-1"><a href="#cb85-1" aria-hidden="true" tabindex="-1"></a>m_diet <span class="ot">&lt;-</span> <span class="fu">lm</span>(loss_kg <span class="sc">~</span> diet, <span class="at">data =</span> diet_data)</span>
+<span id="cb85-2"><a href="#cb85-2" aria-hidden="true" tabindex="-1"></a><span class="fu">coef</span>(m_diet)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> (Intercept) dietlow-carb  dietlow-fat 
+  2.50518512   2.71852533  -0.03005764 </code></pre>
+</div>
+</div>
+<p><strong>Check:</strong> <code>none</code> mean + <code>dietlow-carb</code> coefficient = ? Compare with the low-carb mean above.</p>
+<p>The numeric-coding trap: if diet were stored as the numbers 1, 2, 3, <code>lm()</code> would fit one straight line through them instead of three means.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb87"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb87-1"><a href="#cb87-1" aria-hidden="true" tabindex="-1"></a>diet_data<span class="sc">$</span>diet_number <span class="ot">&lt;-</span> <span class="fu">as.integer</span>(diet_data<span class="sc">$</span>diet)   <span class="co"># 1, 2, 3</span></span>
+<span id="cb87-2"><a href="#cb87-2" aria-hidden="true" tabindex="-1"></a><span class="fu">coef</span>(<span class="fu">lm</span>(loss_kg <span class="sc">~</span> diet_number, <span class="at">data =</span> diet_data))     <span class="co"># one slope: wrong model</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>(Intercept) diet_number 
+ 3.43139865 -0.01502882 </code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb89"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb89-1"><a href="#cb89-1" aria-hidden="true" tabindex="-1"></a><span class="fu">class</span>(diet_data<span class="sc">$</span>diet_number)                          <span class="co"># "integer": always check, then use factor()</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "integer"</code></pre>
+</div>
+</div>
+</section>
+<section id="which-diets-differ-post-hoc-tests" class="level4">
+<h4 class="anchored" data-anchor-id="which-diets-differ-post-hoc-tests">1.9 Which diets differ? Post-hoc tests</h4>
+<p><code>m_diet</code> compares each diet with <code>none</code>, but not low-carb with low-fat. The overall F-test says only that <em>some</em> means differ:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb91"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb91-1"><a href="#cb91-1" aria-hidden="true" tabindex="-1"></a><span class="fu">anova</span>(m_diet)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Analysis of Variance Table
+
+Response: loss_kg
+          Df Sum Sq Mean Sq F value  Pr(&gt;F)  
+diet       2  99.64  49.820  3.7552 0.02938 *
+Residuals 57 756.22  13.267                  
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
+</div>
+</div>
+<p><strong>Step 1: every pair by hand.</strong> Three groups give three pairs. For each pair: difference / SE = t, with the residual df of the model.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb93"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb93-1"><a href="#cb93-1" aria-hidden="true" tabindex="-1"></a>means <span class="ot">&lt;-</span> <span class="fu">tapply</span>(diet_data<span class="sc">$</span>loss_kg, diet_data<span class="sc">$</span>diet, mean)</span>
+<span id="cb93-2"><a href="#cb93-2" aria-hidden="true" tabindex="-1"></a>s     <span class="ot">&lt;-</span> <span class="fu">sigma</span>(m_diet)            <span class="co"># residual SD of the model</span></span>
+<span id="cb93-3"><a href="#cb93-3" aria-hidden="true" tabindex="-1"></a>df_d  <span class="ot">&lt;-</span> <span class="fu">df.residual</span>(m_diet)      <span class="co"># 60 - 3 = 57</span></span>
+<span id="cb93-4"><a href="#cb93-4" aria-hidden="true" tabindex="-1"></a>se_d  <span class="ot">&lt;-</span> s <span class="sc">*</span> <span class="fu">sqrt</span>(<span class="dv">1</span><span class="sc">/</span><span class="dv">20</span> <span class="sc">+</span> <span class="dv">1</span><span class="sc">/</span><span class="dv">20</span>)    <span class="co"># SE of a difference between two means of 20</span></span>
+<span id="cb93-5"><a href="#cb93-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb93-6"><a href="#cb93-6" aria-hidden="true" tabindex="-1"></a>pairs_by_hand <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb93-7"><a href="#cb93-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">pair =</span> <span class="fu">c</span>(<span class="st">"low-carb vs none"</span>, <span class="st">"low-fat vs none"</span>, <span class="st">"low-carb vs low-fat"</span>),</span>
+<span id="cb93-8"><a href="#cb93-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">diff =</span> <span class="fu">c</span>(means[<span class="st">"low-carb"</span>] <span class="sc">-</span> means[<span class="st">"none"</span>],</span>
+<span id="cb93-9"><a href="#cb93-9" aria-hidden="true" tabindex="-1"></a>           means[<span class="st">"low-fat"</span>]  <span class="sc">-</span> means[<span class="st">"none"</span>],</span>
+<span id="cb93-10"><a href="#cb93-10" aria-hidden="true" tabindex="-1"></a>           means[<span class="st">"low-carb"</span>] <span class="sc">-</span> means[<span class="st">"low-fat"</span>])</span>
+<span id="cb93-11"><a href="#cb93-11" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb93-12"><a href="#cb93-12" aria-hidden="true" tabindex="-1"></a>pairs_by_hand <span class="ot">&lt;-</span> pairs_by_hand <span class="sc">%&gt;%</span></span>
+<span id="cb93-13"><a href="#cb93-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">t =</span> diff <span class="sc">/</span> se_d,</span>
+<span id="cb93-14"><a href="#cb93-14" aria-hidden="true" tabindex="-1"></a>         <span class="at">p =</span> <span class="dv">2</span> <span class="sc">*</span> <span class="fu">pt</span>(<span class="sc">-</span><span class="fu">abs</span>(t), df_d))</span>
+<span id="cb93-15"><a href="#cb93-15" aria-hidden="true" tabindex="-1"></a>pairs_by_hand</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                 pair        diff           t          p
+1    low-carb vs none  2.71852533  2.36019126 0.02171121
+2     low-fat vs none -0.03005764 -0.02609568 0.97927217
+3 low-carb vs low-fat  2.74858297  2.38628695 0.02036262</code></pre>
+</div>
+</div>
+<p><strong>Step 2: why correct?</strong> Each test has a 5% false-positive rate, but the chance of at least one false positive in <code>m</code> tests is <code>1 - 0.95^m</code>:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb95"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb95-1"><a href="#cb95-1" aria-hidden="true" tabindex="-1"></a>m_tests <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">6</span>, <span class="dv">10</span>)</span>
+<span id="cb95-2"><a href="#cb95-2" aria-hidden="true" tabindex="-1"></a><span class="fu">data.frame</span>(<span class="at">tests =</span> m_tests, <span class="at">chance_of_a_false_positive =</span> <span class="dv">1</span> <span class="sc">-</span> <span class="fl">0.95</span><span class="sc">^</span>m_tests)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  tests chance_of_a_false_positive
+1     1                  0.0500000
+2     3                  0.1426250
+3     6                  0.2649081
+4    10                  0.4012631</code></pre>
+</div>
+</div>
+<p><strong>Step 3: correct the p-values.</strong> Bonferroni multiplies each p by the number of tests; Holm does the same in steps and is never worse. <code>p.adjust()</code> does both:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb97"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb97-1"><a href="#cb97-1" aria-hidden="true" tabindex="-1"></a>pairs_by_hand <span class="sc">%&gt;%</span></span>
+<span id="cb97-2"><a href="#cb97-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">p_bonferroni =</span> <span class="fu">p.adjust</span>(p, <span class="at">method =</span> <span class="st">"bonferroni"</span>),</span>
+<span id="cb97-3"><a href="#cb97-3" aria-hidden="true" tabindex="-1"></a>         <span class="at">p_holm       =</span> <span class="fu">p.adjust</span>(p, <span class="at">method =</span> <span class="st">"holm"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                 pair        diff           t          p p_bonferroni
+1    low-carb vs none  2.71852533  2.36019126 0.02171121   0.06513364
+2     low-fat vs none -0.03005764 -0.02609568 0.97927217   1.00000000
+3 low-carb vs low-fat  2.74858297  2.38628695 0.02036262   0.06108787
+      p_holm
+1 0.06108787
+2 0.97927217
+3 0.06108787</code></pre>
+</div>
+</div>
+<p><strong>Check:</strong> which pairs are below .05 before correction, and which after?</p>
+<p><strong>Step 4: the same in <code>emmeans</code>.</strong> <code>emmeans()</code> gives the mean of each group from the model; <code>pairs()</code> compares every pair, with Tukey’s correction by default:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb99"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb99-1"><a href="#cb99-1" aria-hidden="true" tabindex="-1"></a>emm <span class="ot">&lt;-</span> <span class="fu">emmeans</span>(m_diet, <span class="sc">~</span> diet)</span>
+<span id="cb99-2"><a href="#cb99-2" aria-hidden="true" tabindex="-1"></a>emm</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> diet     emmean    SE df lower.CL upper.CL
+ none       2.51 0.814 57    0.874     4.14
+ low-carb   5.22 0.814 57    3.593     6.85
+ low-fat    2.48 0.814 57    0.844     4.11
+
+Confidence level used: 0.95 </code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb101"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb101-1"><a href="#cb101-1" aria-hidden="true" tabindex="-1"></a><span class="fu">pairs</span>(emm)                     <span class="co"># Tukey (default)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> contrast               estimate   SE df t.ratio p.value
+ none - (low-carb)       -2.7185 1.15 57  -2.360  0.0557
+ none - (low-fat)         0.0301 1.15 57   0.026  0.9996
+ (low-carb) - (low-fat)   2.7486 1.15 57   2.386  0.0524
+
+P value adjustment: tukey method for comparing a family of 3 estimates </code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb103"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb103-1"><a href="#cb103-1" aria-hidden="true" tabindex="-1"></a><span class="fu">pairs</span>(emm, <span class="at">adjust =</span> <span class="st">"holm"</span>)    <span class="co"># Holm, as in Step 3</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> contrast               estimate   SE df t.ratio p.value
+ none - (low-carb)       -2.7185 1.15 57  -2.360  0.0611
+ none - (low-fat)         0.0301 1.15 57   0.026  0.9793
+ (low-carb) - (low-fat)   2.7486 1.15 57   2.386  0.0611
+
+P value adjustment: holm method for 3 tests </code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb105"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb105-1"><a href="#cb105-1" aria-hidden="true" tabindex="-1"></a><span class="fu">confint</span>(<span class="fu">pairs</span>(emm))            <span class="co"># differences with Tukey-adjusted 95% CIs</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> contrast               estimate   SE df lower.CL upper.CL
+ none - (low-carb)       -2.7185 1.15 57  -5.4903   0.0532
+ none - (low-fat)         0.0301 1.15 57  -2.7417   2.8018
+ (low-carb) - (low-fat)   2.7486 1.15 57  -0.0232   5.5204
+
+Confidence level used: 0.95 
+Conf-level adjustment: tukey method for comparing a family of 3 estimates </code></pre>
+</div>
+</div>
+<p><code>emmeans</code> writes each pair as first − second, so some signs are flipped compared with our table.</p>
+</section>
+<section id="two-predictors-multiple-regression-and-centring" class="level4">
+<h4 class="anchored" data-anchor-id="two-predictors-multiple-regression-and-centring">1.10 Two predictors: multiple regression and centring</h4>
+<p>Back to Trial A. Add starting weight to the group model. Each coefficient is now the effect of one predictor with the other held constant.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb107"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb107-1"><a href="#cb107-1" aria-hidden="true" tabindex="-1"></a>m2 <span class="ot">&lt;-</span> <span class="fu">lm</span>(loss_kg <span class="sc">~</span> group <span class="sc">+</span> baseline_kg, <span class="at">data =</span> trial_A_data)</span>
+<span id="cb107-2"><a href="#cb107-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(m2)<span class="sc">$</span>coefficients</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                  Estimate Std. Error   t value     Pr(&gt;|t|)
+(Intercept)    -16.2807817 4.95908227 -3.283023 0.0019912084
+groupprogramme   4.3593684 1.28924930  3.381323 0.0015009342
+baseline_kg      0.1878969 0.05298924  3.545944 0.0009268942</code></pre>
+</div>
+</div>
+<p>The intercept (about −16 kg) is the prediction for a control participant who weighs 0 kg. <strong>Centring</strong> moves zero to a meaningful value: subtract the mean starting weight, and the intercept becomes the prediction for a control participant of average weight.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb109"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb109-1"><a href="#cb109-1" aria-hidden="true" tabindex="-1"></a>trial_A_data <span class="ot">&lt;-</span> trial_A_data <span class="sc">%&gt;%</span></span>
+<span id="cb109-2"><a href="#cb109-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">baseline_c =</span> baseline_kg <span class="sc">-</span> <span class="fu">mean</span>(baseline_kg))</span>
+<span id="cb109-3"><a href="#cb109-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb109-4"><a href="#cb109-4" aria-hidden="true" tabindex="-1"></a>m2_c <span class="ot">&lt;-</span> <span class="fu">lm</span>(loss_kg <span class="sc">~</span> group <span class="sc">+</span> baseline_c, <span class="at">data =</span> trial_A_data)</span>
+<span id="cb109-5"><a href="#cb109-5" aria-hidden="true" tabindex="-1"></a><span class="fu">cbind</span>(<span class="at">raw =</span> <span class="fu">coef</span>(m2), <span class="at">centred =</span> <span class="fu">coef</span>(m2_c))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                       raw   centred
+(Intercept)    -16.2807817 1.0057325
+groupprogramme   4.3593684 4.3593684
+baseline_kg      0.1878969 0.1878969</code></pre>
+</div>
+</div>
+<p><strong>Check:</strong> which coefficient changed, and which stayed the same?</p>
+<p>In a randomised trial the group estimate barely moves when we add the covariate, but starting weight explains part of the noise, so the CI for the group effect gets narrower:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb111"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb111-1"><a href="#cb111-1" aria-hidden="true" tabindex="-1"></a><span class="fu">confint</span>(m_group)[<span class="st">"groupprogramme"</span>, ]   <span class="co"># without the covariate</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   2.5 %   97.5 % 
+1.459204 7.265796 </code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb113"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb113-1"><a href="#cb113-1" aria-hidden="true" tabindex="-1"></a><span class="fu">confint</span>(m2)[<span class="st">"groupprogramme"</span>, ]        <span class="co"># with the covariate</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   2.5 %   97.5 % 
+1.762687 6.956050 </code></pre>
+</div>
+</div>
+<p>Two parallel lines, one per group:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb115"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb115-1"><a href="#cb115-1" aria-hidden="true" tabindex="-1"></a>trial_A_data<span class="sc">$</span>fitted_m2 <span class="ot">&lt;-</span> <span class="fu">fitted</span>(m2)</span>
+<span id="cb115-2"><a href="#cb115-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb115-3"><a href="#cb115-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(trial_A_data, <span class="fu">aes</span>(<span class="at">x =</span> baseline_kg, <span class="at">y =</span> loss_kg, <span class="at">colour =</span> group)) <span class="sc">+</span></span>
+<span id="cb115-4"><a href="#cb115-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb115-5"><a href="#cb115-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">y =</span> fitted_m2), <span class="at">linewidth =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb115-6"><a href="#cb115-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_colour_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="at">control =</span> <span class="st">"grey50"</span>, <span class="at">programme =</span> <span class="st">"#C2185B"</span>)) <span class="sc">+</span></span>
+<span id="cb115-7"><a href="#cb115-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Starting weight (kg)"</span>, <span class="at">y =</span> <span class="st">"Weight lost (kg)"</span>, <span class="at">colour =</span> <span class="cn">NULL</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="seminar-04-worksheet_files/figure-html/unnamed-chunk-38-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="what-to-adjust-for-a-collider-simulated" class="level4">
+<h4 class="anchored" data-anchor-id="what-to-adjust-for-a-collider-simulated">1.11 What to adjust for: a collider, simulated</h4>
+<p>Whether a variable belongs in the model is a causal question. Here we simulate a trial where we know the truth: the programme causes 4 kg of extra loss. People drop out unless they are in the programme or are losing weight, so “completed” is caused by both group and loss: a collider.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb116"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb116-1"><a href="#cb116-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">4</span>)</span>
+<span id="cb116-2"><a href="#cb116-2" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">2000</span></span>
+<span id="cb116-3"><a href="#cb116-3" aria-hidden="true" tabindex="-1"></a>sim <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">programme =</span> <span class="fu">rep</span>(<span class="dv">0</span><span class="sc">:</span><span class="dv">1</span>, <span class="at">each =</span> n <span class="sc">/</span> <span class="dv">2</span>))</span>
+<span id="cb116-4"><a href="#cb116-4" aria-hidden="true" tabindex="-1"></a>sim<span class="sc">$</span>loss <span class="ot">&lt;-</span> <span class="dv">4</span> <span class="sc">*</span> sim<span class="sc">$</span>programme <span class="sc">+</span> <span class="fu">rnorm</span>(n, <span class="dv">0</span>, <span class="dv">5</span>)</span>
+<span id="cb116-5"><a href="#cb116-5" aria-hidden="true" tabindex="-1"></a>sim<span class="sc">$</span>completed <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(sim<span class="sc">$</span>programme <span class="sc">+</span> sim<span class="sc">$</span>loss <span class="sc">/</span> <span class="dv">5</span> <span class="sc">+</span> <span class="fu">rnorm</span>(n, <span class="dv">0</span>, <span class="dv">1</span>) <span class="sc">&gt;</span> <span class="dv">1</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Now estimate the programme effect three ways:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb117"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb117-1"><a href="#cb117-1" aria-hidden="true" tabindex="-1"></a><span class="fu">coef</span>(<span class="fu">lm</span>(loss <span class="sc">~</span> programme, <span class="at">data =</span> sim))[<span class="st">"programme"</span>]                              <span class="co"># everyone</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>programme 
+ 4.294022 </code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb119"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb119-1"><a href="#cb119-1" aria-hidden="true" tabindex="-1"></a><span class="fu">coef</span>(<span class="fu">lm</span>(loss <span class="sc">~</span> programme, <span class="at">data =</span> sim <span class="sc">%&gt;%</span> <span class="fu">filter</span>(completed <span class="sc">==</span> <span class="dv">1</span>)))[<span class="st">"programme"</span>]   <span class="co"># completers only</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>programme 
+ 1.597658 </code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb121"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb121-1"><a href="#cb121-1" aria-hidden="true" tabindex="-1"></a><span class="fu">coef</span>(<span class="fu">lm</span>(loss <span class="sc">~</span> programme <span class="sc">+</span> completed, <span class="at">data =</span> sim))[<span class="st">"programme"</span>]                  <span class="co"># adjusting for completion</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>programme 
+ 1.440347 </code></pre>
+</div>
+</div>
+<p><strong>Check:</strong> which estimate is close to the true 4 kg? Analysing only completers, or adding <code>completed</code> as a predictor, creates a false association. Analyse everyone as randomised.</p>
+</section>
+<section id="checking-the-model" class="level4">
+<h4 class="anchored" data-anchor-id="checking-the-model">1.12 Checking the model</h4>
+<p><code>plot()</code> on a fitted <code>lm</code> draws four diagnostic plots. The theory block showed what problems look like.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb123"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb123-1"><a href="#cb123-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">2</span>))</span>
+<span id="cb123-2"><a href="#cb123-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(m2)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="seminar-04-worksheet_files/figure-html/unnamed-chunk-41-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb124"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb124-1"><a href="#cb124-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">1</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Read them one at a time:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Plot</th>
+<th>Looks fine if…</th>
+<th>A problem looks like…</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Residuals vs Fitted</td>
+<td>a flat, even band around 0</td>
+<td>a curve (non-linearity) or a funnel (unequal variance)</td>
+</tr>
+<tr class="even">
+<td>Q–Q Residuals</td>
+<td>points close to the dashed line</td>
+<td>ends that bend away (skew, heavy tails)</td>
+</tr>
+<tr class="odd">
+<td>Scale-Location</td>
+<td>a flat line, even spread</td>
+<td>a rising line (variance grows with the fitted value)</td>
+</tr>
+<tr class="even">
+<td>Residuals vs Leverage</td>
+<td>no point beyond the Cook’s distance lines</td>
+<td>one point far out, labelled with its row number</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Check:</strong> for <code>m2</code>, write one sentence per plot.</p>
+<p><code>predict()</code> gives the model’s prediction for new values, for example a programme participant who starts at 100 kg:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb125"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb125-1"><a href="#cb125-1" aria-hidden="true" tabindex="-1"></a>new_person <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">group =</span> <span class="fu">factor</span>(<span class="st">"programme"</span>, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"control"</span>, <span class="st">"programme"</span>)), <span class="at">baseline_kg =</span> <span class="dv">100</span>)</span>
+<span id="cb125-2"><a href="#cb125-2" aria-hidden="true" tabindex="-1"></a><span class="fu">predict</span>(m2, <span class="at">newdata =</span> new_person, <span class="at">interval =</span> <span class="st">"confidence"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>       fit      lwr      upr
+1 6.868276 4.843716 8.892836</code></pre>
+</div>
+</div>
+</section>
+<section id="reporting-an-lm-result" class="level4">
+<h4 class="anchored" data-anchor-id="reporting-an-lm-result">1.13 Reporting an <code>lm()</code> result</h4>
+<p>A report gives each estimate in its units, with a 95% CI, then the test: t(df) and the exact p.&nbsp;Collect the numbers:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb127"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb127-1"><a href="#cb127-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(m2)<span class="sc">$</span>coefficients   <span class="co"># estimates, SEs, t, p</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                  Estimate Std. Error   t value     Pr(&gt;|t|)
+(Intercept)    -16.2807817 4.95908227 -3.283023 0.0019912084
+groupprogramme   4.3593684 1.28924930  3.381323 0.0015009342
+baseline_kg      0.1878969 0.05298924  3.545944 0.0009268942</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb129"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb129-1"><a href="#cb129-1" aria-hidden="true" tabindex="-1"></a><span class="fu">confint</span>(m2)                <span class="co"># 95% CIs</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                      2.5 %     97.5 %
+(Intercept)    -26.26888608 -6.2926773
+groupprogramme   1.76268700  6.9560498
+baseline_kg      0.08117109  0.2946227</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb131"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb131-1"><a href="#cb131-1" aria-hidden="true" tabindex="-1"></a><span class="fu">df.residual</span>(m2)            <span class="co"># df for t</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 45</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb133"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb133-1"><a href="#cb133-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(m2)<span class="sc">$</span>r.squared      <span class="co"># R²</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.3480482</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb135"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb135-1"><a href="#cb135-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(m2)<span class="sc">$</span>adj.r.squared  <span class="co"># adjusted R²</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.3190725</code></pre>
+</div>
+</div>
+<p>Find each of these numbers in the example report from the theory block:</p>
+<blockquote class="blockquote">
+<p>“We regressed weight loss (kg) on group (reference: control) and starting weight (kg) using <code>lm()</code> in R 4.4.0. In the 48 participants, the programme group lost 4.36 kg more than the control group at the same starting weight, 95% CI [1.76, 6.96], t(45) = 3.38, p = .002. Each additional kilogram of starting weight was associated with 0.19 kg more weight loss, 95% CI [0.08, 0.29], t(45) = 3.55, p &lt; .001. The model explained 35% of the variance (adjusted R² = .32). Residual plots showed no non-linearity, unequal variance or influential participants.”</p>
+</blockquote>
+<p>Avoid “a significant effect of group (p &lt; .05)” with no estimate or CI.</p>
+<hr>
+</section>
+</section>
+<section id="part-2-datacamp" class="level2">
+<h2 class="anchored" data-anchor-id="part-2-datacamp">Part 2: DataCamp</h2>
+<p>This week’s course:</p>
+<ul>
+<li><a href="https://app.datacamp.com/learn/courses/introduction-to-regression-in-r">Introduction to Regression in R</a></li>
+</ul>
+<hr>
+</section>
+<section id="part-3-exercises-in-rstudio" class="level2">
+<h2 class="anchored" data-anchor-id="part-3-exercises-in-rstudio">Part 3: Exercises in RStudio</h2>
+<p>The exercises repeat the steps of Part 1 on a <strong>new data set</strong>, and this time <strong>no code is given</strong>: write every chunk yourself. Each exercise names the walkthrough section it mirrors (in brackets); if you get stuck, copy the code from there and adapt it.</p>
+<p><strong>The study.</strong> 120 students took part in a reaction-time experiment. Each was randomly given a drink with no caffeine (<code>placebo</code>), a <code>low</code> dose or a <code>high</code> dose of caffeine (40 per group), reported how many hours they had slept the night before (<code>sleep_h</code>), and then did a simple reaction-time task (<code>rt_ms</code>, mean reaction time in milliseconds; lower is faster). The data are simulated. Run this chunk to create them (no changes needed):</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb137"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb137-1"><a href="#cb137-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">2045</span>)</span>
+<span id="cb137-2"><a href="#cb137-2" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">40</span></span>
+<span id="cb137-3"><a href="#cb137-3" aria-hidden="true" tabindex="-1"></a>rt_data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb137-4"><a href="#cb137-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">id      =</span> <span class="fu">sprintf</span>(<span class="st">"S%03d"</span>, <span class="dv">1</span><span class="sc">:</span>(<span class="dv">3</span> <span class="sc">*</span> n)),</span>
+<span id="cb137-5"><a href="#cb137-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">dose    =</span> <span class="fu">factor</span>(<span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">"placebo"</span>, <span class="st">"low"</span>, <span class="st">"high"</span>), <span class="at">each =</span> n), <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"placebo"</span>, <span class="st">"low"</span>, <span class="st">"high"</span>)),</span>
+<span id="cb137-6"><a href="#cb137-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">age     =</span> <span class="fu">sample</span>(<span class="dv">18</span><span class="sc">:</span><span class="dv">35</span>, <span class="dv">3</span> <span class="sc">*</span> n, <span class="at">replace =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb137-7"><a href="#cb137-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">sleep_h =</span> <span class="fu">round</span>(<span class="fu">rnorm</span>(<span class="dv">3</span> <span class="sc">*</span> n, <span class="at">mean =</span> <span class="dv">7</span>, <span class="at">sd =</span> <span class="fl">1.2</span>), <span class="dv">1</span>)</span>
+<span id="cb137-8"><a href="#cb137-8" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb137-9"><a href="#cb137-9" aria-hidden="true" tabindex="-1"></a>rt_data<span class="sc">$</span>rt_ms <span class="ot">&lt;-</span> <span class="fu">round</span>(<span class="dv">420</span> <span class="sc">-</span> <span class="dv">15</span> <span class="sc">*</span> (rt_data<span class="sc">$</span>sleep_h <span class="sc">-</span> <span class="dv">7</span>) <span class="sc">+</span></span>
+<span id="cb137-10"><a href="#cb137-10" aria-hidden="true" tabindex="-1"></a>                       <span class="fu">c</span>(<span class="dv">0</span>, <span class="sc">-</span><span class="dv">12</span>, <span class="sc">-</span><span class="dv">30</span>)[<span class="fu">as.integer</span>(rt_data<span class="sc">$</span>dose)] <span class="sc">+</span></span>
+<span id="cb137-11"><a href="#cb137-11" aria-hidden="true" tabindex="-1"></a>                       <span class="fu">rnorm</span>(<span class="dv">3</span> <span class="sc">*</span> n, <span class="at">mean =</span> <span class="dv">0</span>, <span class="at">sd =</span> <span class="dv">35</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<section id="exercise-1-first-look-mirrors-1.0" class="level3">
+<h3 class="anchored" data-anchor-id="exercise-1-first-look-mirrors-1.0">Exercise 1 — First look [mirrors 1.0]</h3>
+<p>Look at the data with <code>glimpse()</code>. How many people are in each dose group, and what is the mean reaction time in each? Then plot reaction time against hours of sleep.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb138"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb138-1"><a href="#cb138-1" aria-hidden="true" tabindex="-1"></a><span class="co"># your code here</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="exercise-2-the-mean-as-a-model-mirrors-1.2" class="level3">
+<h3 class="anchored" data-anchor-id="exercise-2-the-mean-as-a-model-mirrors-1.2">Exercise 2 — The mean as a model [mirrors 1.2]</h3>
+<p>Use the mean reaction time as the model for everyone. Compute the residuals, the SSE and the RMSE. Fit the same model with <code>lm()</code> and confirm that the intercept is the mean and that the SSE is the same.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb139"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb139-1"><a href="#cb139-1" aria-hidden="true" tabindex="-1"></a><span class="co"># your code here</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p><strong>Check:</strong> in words, what does the RMSE tell you about the typical miss of this model, in ms?</p>
+</section>
+<section id="exercise-3-a-line-mirrors-1.3" class="level3">
+<h3 class="anchored" data-anchor-id="exercise-3-a-line-mirrors-1.3">Exercise 3 — A line [mirrors 1.3]</h3>
+<p>Fit a model in which hours of sleep predict reaction time. Print the coefficients and plot the data with the fitted line. Then use the line to predict the reaction time of someone who slept 7 hours, and of someone who slept 0 hours.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb140"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb140-1"><a href="#cb140-1" aria-hidden="true" tabindex="-1"></a><span class="co"># your code here</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p><strong>Check:</strong> complete the sentence: “For every extra hour of sleep, reaction time was about ___ ms ___ (faster/slower).” Which of your two predictions do you trust less, and why?</p>
+</section>
+<section id="exercise-4-least-squares-by-hand-mirrors-1.4" class="level3">
+<h3 class="anchored" data-anchor-id="exercise-4-least-squares-by-hand-mirrors-1.4">Exercise 4 — Least squares by hand [mirrors 1.4]</h3>
+<p>Write a function that returns the SSE of a line through the two means for any slope. Score the slopes from −40 to 10 in steps of 0.5, plot SSE against slope, and find the bottom of the U. Then compute β1 and β0 with the formula and compare them with <code>coef()</code>.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb141"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb141-1"><a href="#cb141-1" aria-hidden="true" tabindex="-1"></a><span class="co"># your code here</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="exercise-5-r²-mirrors-1.5" class="level3">
+<h3 class="anchored" data-anchor-id="exercise-5-r²-mirrors-1.5">Exercise 5 — R² [mirrors 1.5]</h3>
+<p>Compute R² from the SSE of the mean model (Exercise 2) and the SSE of the line (Exercise 3), and compare it with <code>summary()</code>.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb142"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb142-1"><a href="#cb142-1" aria-hidden="true" tabindex="-1"></a><span class="co"># your code here</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p><strong>Check:</strong> what share of the differences in reaction time does sleep account for?</p>
+</section>
+<section id="exercise-6-ci-and-p-value-of-the-slope-mirrors-1.61.7" class="level3">
+<h3 class="anchored" data-anchor-id="exercise-6-ci-and-p-value-of-the-slope-mirrors-1.61.7">Exercise 6 — CI and p-value of the slope [mirrors 1.6–1.7]</h3>
+<p>For the sleep slope: compute s_e and the SE by hand, build the 95% CI by hand, and compare it with <code>confint()</code>. Then compute t and the two-sided p-value by hand, and compare them with <code>summary()</code>.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb143"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb143-1"><a href="#cb143-1" aria-hidden="true" tabindex="-1"></a><span class="co"># your code here</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p><strong>Check:</strong> does the CI include 0? What does the p-value tell you, in one sentence?</p>
+</section>
+<section id="exercise-7-dose-as-a-predictor-mirrors-1.8" class="level3">
+<h3 class="anchored" data-anchor-id="exercise-7-dose-as-a-predictor-mirrors-1.8">Exercise 7 — Dose as a predictor [mirrors 1.8]</h3>
+<p>Fit a model with <code>dose</code> as the only predictor. Compute the three group means and match each coefficient to them.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb144"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb144-1"><a href="#cb144-1" aria-hidden="true" tabindex="-1"></a><span class="co"># your code here</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p><strong>Check:</strong> which group is the reference? What does the coefficient <code>dosehigh</code> mean, in words and in ms?</p>
+</section>
+<section id="exercise-8-which-doses-differ-mirrors-1.9" class="level3">
+<h3 class="anchored" data-anchor-id="exercise-8-which-doses-differ-mirrors-1.9">Exercise 8 — Which doses differ? [mirrors 1.9]</h3>
+<p>Compare every pair of doses with <code>emmeans</code>, first with the Tukey correction and then with Holm. Get the confidence intervals of the differences.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb145"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb145-1"><a href="#cb145-1" aria-hidden="true" tabindex="-1"></a><span class="co"># your code here</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p><strong>Check:</strong> which pairs differ after correction? Write one sentence for the clearest difference, with its estimate and 95% CI.</p>
+</section>
+<section id="exercise-9-two-predictors-and-centring-mirrors-1.10" class="level3">
+<h3 class="anchored" data-anchor-id="exercise-9-two-predictors-and-centring-mirrors-1.10">Exercise 9 — Two predictors and centring [mirrors 1.10]</h3>
+<p>Add hours of sleep to the dose model. Compare the CI for <code>dosehigh</code> with and without sleep in the model. Then centre <code>sleep_h</code>, refit, and compare the two sets of coefficients side by side.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb146"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb146-1"><a href="#cb146-1" aria-hidden="true" tabindex="-1"></a><span class="co"># your code here</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p><strong>Check:</strong> what does the intercept mean in the centred model? Which coefficients changed when you centred, and which did not?</p>
+</section>
+<section id="exercise-10-diagnostics-mirrors-1.12" class="level3">
+<h3 class="anchored" data-anchor-id="exercise-10-diagnostics-mirrors-1.12">Exercise 10 — Diagnostics [mirrors 1.12]</h3>
+<p>Draw the four diagnostic plots for the model with dose and sleep, and use the table in 1.12 to write one sentence per plot.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb147"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb147-1"><a href="#cb147-1" aria-hidden="true" tabindex="-1"></a><span class="co"># your code here</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="exercise-11-report-it-mirrors-1.13" class="level3">
+<h3 class="anchored" data-anchor-id="exercise-11-report-it-mirrors-1.13">Exercise 11 — Report it [mirrors 1.13]</h3>
+<p>Collect the numbers you need for the model with dose and sleep, and write a short results paragraph in the style of 1.13: the high-dose effect and the sleep effect, each with its estimate, 95% CI, t, degrees of freedom and p, and the R² of the model.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb148"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb148-1"><a href="#cb148-1" aria-hidden="true" tabindex="-1"></a><span class="co"># your code here</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<blockquote class="blockquote">
+<p>Your paragraph:</p>
+</blockquote>
+<hr>
+</section>
+</section>
+<section id="extra-optional" class="level2">
+<h2 class="anchored" data-anchor-id="extra-optional">Extra (optional)</h2>
+<ul>
+<li><strong>A confounder.</strong> Simulate an observational study (n = 2,000): <code>motivation &lt;- rnorm(n)</code>; exercise hours depend on motivation (<code>exercise &lt;- 2 + motivation + rnorm(n)</code>); weight loss depends on both (<code>loss &lt;- 0.5 * exercise + 2 * motivation + rnorm(n, 0, 3)</code>). The true effect of exercise is 0.5 kg per hour. Fit <code>loss ~ exercise</code> and <code>loss ~ exercise + motivation</code>. Which one recovers 0.5, and why?</li>
+<li><strong>Numbers instead of a factor.</strong> Fit <code>rt_ms ~ as.integer(dose)</code> to the Part 3 data. Why is the result meaningless?</li>
+<li><strong>Interactive:</strong> use the least-squares explorer to find the minimum SSE by dragging the line before pressing <em>Fit by least squares</em>.</li>
+</ul>
+</section>
+<section id="where-to-get-help" class="level2">
+<h2 class="anchored" data-anchor-id="where-to-get-help">Where to get help</h2>
+<p>Ask on the PSY40780 module forum (tag Ondrej or Cameron) any time before the session, or bring questions to the practical — Cameron is there specifically for this.</p>
+</section>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
