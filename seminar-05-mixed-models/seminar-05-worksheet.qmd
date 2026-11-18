@@ -1,0 +1,604 @@
+---
+title: "Seminar 5 — Linear Mixed-Effects Models"
+subtitle: "PSY40760 Advanced Data Analysis and Statistics in R"
+date: 2026-11-18
+format:
+  html:
+    toc: true
+    toc-depth: 4
+    number-sections: false
+---
+
+# Worksheet 5
+
+## Welcome
+
+## Session at a glance
+
+|  |  |
+|----|----|
+| **Date** | Wednesday 18 November 2026 |
+| **Room** | QUI-115 |
+| **Time** | 170 min |
+| **Staff** | Dr Ondrej Zika, Cameron McCabe |
+| **Theory** | Non-independence; pre-post data and random intercepts; random slopes; complete, no and partial pooling; reading the output; why the random part decides the SE; model comparison (LRT, AIC, BIC); degrees of freedom; fixed vs random effects; post hocs and reporting |
+| **Practical** | The same steps in R: a joint walkthrough on Trial A, then guided exercises on `sleepstudy` |
+
+## Before you arrive
+
+### 1. Environment
+
+**Get this week's files: download them, do not clone the repository.** Inside your existing course folder `psy40760-practicals-2026`, create a folder called `seminar-05-mixed-models` (exact name). From [GitHub](https://github.com/ozika/psy40760-practicals-2026/tree/main/seminar-05-mixed-models), download `seminar-05-worksheet.qmd` and the folder `seminar-05-worksheet_files` (with all its files) into it, keeping the same structure:
+
+```         
+psy40760-practicals-2026/
+├── .root-practicals
+├── renv.lock
+├── ...
+└── seminar-05-mixed-models/
+    ├── seminar-05-worksheet.qmd
+    └── seminar-05-worksheet_files/
+```
+
+Do **not** download or clone the whole repository again: that would overwrite your earlier worksheets and your `renv` set-up. (Only if you cloned the repository with git in the first week: run `git pull` instead.)
+
+Then use the course folder as in previous weeks (`here` + `renv`, see the [environment set-up guide](https://github.com/ozika/psy40760-practicals-2026/blob/main/environment-setup/environment-setup.pdf)). This week adds the mixed-model packages:
+
+```{r}
+#| eval: false
+library(here)
+here::i_am(".root-practicals")
+
+library(renv)
+renv::load(here::here())
+
+renv::install(c("lme4", "lmerTest", "pbkrtest", "emmeans"))
+renv::snapshot()
+```
+
+`lme4` fits the models, `lmerTest` adds degrees of freedom and p-values, `pbkrtest` provides the Kenward–Roger degrees of freedom, and `emmeans` computes the rate in each group (post hoc comparisons).
+
+### 2. Reading
+
+|  |  |
+|----|----|
+| **Theory** | Baker (2022), *Research Methods Using R*, Ch. 7: Mixed-effects models |
+|  | Brown, V. A. (2021). [An introduction to linear mixed-effects modeling in R](https://journals.sagepub.com/doi/full/10.1177/2515245920960351). *AMPPS*, 4(1). |
+|  | Bates, Mächler, Bolker & Walker (2015). [Fitting linear mixed-effects models using lme4](https://www.jstatsoft.org/v67/i01/). *Journal of Statistical Software*, 67(1). |
+|  | Barr, Levy, Scheepers & Tily (2013). [Random effects structure for confirmatory hypothesis testing: Keep it maximal](https://doi.org/10.1016/j.jml.2012.11.001). *Journal of Memory and Language*, 68(3). |
+
+------------------------------------------------------------------------
+
+## Part 1: Joint walkthrough
+
+Each subsection follows a part of the theory block. Notation is the same as on the slides: β for fixed effects, u for each person's deviation, e for the residual, and `*` for "multiplied by".
+
+#### 1.0 Load the packages and the data
+
+```{r}
+#| message: false
+#| warning: false
+library(here)
+here::i_am(".root-practicals")
+
+library(renv)
+renv::load(here::here())
+
+library(dplyr)
+library(ggplot2)
+library(lme4)
+library(lmerTest)      # loads after lme4, so lmer() now also reports df and p-values
+library(emmeans)
+
+grp_cols <- c(control = "grey50", programme = "#C2185B")
+
+trial  <- read.csv(here::here("seminar-05-mixed-models", "seminar-05-worksheet_files", "trial_a.csv"))
+weekly <- read.csv(here::here("seminar-05-mixed-models", "seminar-05-worksheet_files", "trial_a_weekly.csv"))
+
+trial  <- trial  %>% mutate(group = factor(group, levels = c("control", "programme")))
+weekly <- weekly %>% mutate(group = factor(group, levels = c("control", "programme")))
+```
+
+### A. Two rows per person: pre and post
+
+#### 1.1 From one row to two rows per person
+
+`trial` is the Seminar 4 data: one row per person, with the starting weight and the weight lost over 12 weeks. Turn it into **long format**: one row per measurement, `time` = 0 before and 1 after the programme.
+
+```{r}
+pre  <- trial %>% transmute(id, group, time = 0, weight = baseline_kg)
+post <- trial %>% transmute(id, group, time = 1, weight = baseline_kg - loss_kg)
+
+prepost <- bind_rows(pre, post) %>% arrange(id, time)
+head(prepost)
+nrow(prepost)
+```
+
+The group means before and after:
+
+```{r}
+prepost %>%
+  group_by(group, time) %>%
+  summarise(mean_weight = mean(weight), .groups = "drop")
+```
+
+**Check:** how much weight did each group lose on average? What is the difference between the two losses? This difference is `time:group` in `weight ~ time * group`.
+
+#### 1.2 Ignore who is who: `lm()` on 96 rows
+
+```{r}
+m_pp_lm <- lm(weight ~ time * group, data = prepost)
+summary(m_pp_lm)$coefficients
+confint(m_pp_lm)["time:groupprogramme", ]
+```
+
+**Check:** the estimate is right (−4.36 kg), but how wide is the 95% CI? Where did the differences in starting weight between people go?
+
+#### 1.3 Random intercepts: tell the model who is who
+
+`(1 | id)` gives each person their own starting level, u0j. The model estimates one SD for these, not 48 separate numbers.
+
+```{r}
+m_pp_ri <- lmer(weight ~ time * group + (1 | id), data = prepost)
+summary(m_pp_ri)$coefficients
+VarCorr(m_pp_ri)
+```
+
+Compare it with a t-test on each person's change score (Seminar 2):
+
+```{r}
+change <- trial %>% mutate(change = -loss_kg)
+t.test(change ~ group, data = change, var.equal = TRUE)
+```
+
+**Check:** compare the t and df of `time:groupprogramme` with the t-test. What does `(1 | id)` do that `lm()` did not?
+
+### B. Weekly weigh-ins
+
+#### 1.4 The data: one row per weigh-in
+
+```{r}
+weekly %>% filter(id == "P01")
+
+weekly %>%
+  count(id, group) %>%
+  summarise(people = n(), rows = sum(n), fewest = min(n), most = max(n))
+```
+
+Plot every person's trajectory (a "spaghetti plot"):
+
+```{r}
+ggplot(weekly, aes(x = week, y = weight_kg, group = id, colour = group)) +
+  geom_line(alpha = 0.5) +
+  geom_point(size = 0.6) +
+  facet_wrap(~ group) +
+  scale_colour_manual(values = grp_cols) +
+  labs(x = "Week of the programme", y = "Weight (kg)") +
+  theme(legend.position = "none")
+```
+
+Fit a separate line for each person. `reframe()` runs `lm()` within each person:
+
+```{r}
+per_person <- weekly %>%
+  group_by(id, group) %>%
+  reframe(start = coef(lm(weight_kg ~ week))[1],
+          rate  = coef(lm(weight_kg ~ week))[2],
+          n     = n())
+
+range(per_person$start)   # starting weights
+range(per_person$rate)    # kg per week
+```
+
+**Check:** how many rows and how many people? Do people differ more in where they start or in how fast they change?
+
+#### 1.5 Three ways to handle people
+
+**Way 1, complete pooling:** `lm()` on all 481 rows.
+
+```{r}
+m_lm <- lm(weight_kg ~ week * group, data = weekly)
+summary(m_lm)$coefficients
+```
+
+**Way 2, no pooling:** one rate per person (from 1.4), then a t-test on the rates. Every person counts equally, whether they came 3 times or 13.
+
+```{r}
+t.test(rate ~ group, data = per_person, var.equal = TRUE)
+```
+
+**Way 3, partial pooling:** the mixed model. Each person gets their own start and rate, and the people come from one common distribution.
+
+```{r}
+m_int   <- lmer(weight_kg ~ week * group + (1 | id), data = weekly)
+m_slope <- lmer(weight_kg ~ week * group + (1 + week | id), data = weekly)
+```
+
+**Shrinkage.** `coef()` gives each person's intercept and slope from the mixed model. For programme participants we add the interaction, β3, to get their own rate:
+
+```{r}
+pp <- coef(m_slope)$id
+pp$id <- rownames(pp)
+
+shrink <- per_person %>%
+  left_join(pp %>% select(id, week_mixed = week), by = "id") %>%
+  mutate(rate_mixed = ifelse(group == "programme",
+                             week_mixed + fixef(m_slope)["week:groupprogramme"],
+                             week_mixed))
+
+shrink %>% arrange(n) %>% select(id, group, n, rate, rate_mixed) %>% head(6)
+
+ggplot(shrink, aes(x = rate, y = rate_mixed, size = n, colour = group)) +
+  geom_abline(linetype = 2) +
+  geom_point(alpha = 0.7) +
+  scale_colour_manual(values = grp_cols) +
+  labs(x = "Own line (no pooling), kg/week", y = "Mixed model (partial pooling), kg/week",
+       size = "Weigh-ins", colour = NULL)
+```
+
+**Check:** which people move furthest from the dashed line, and why?
+
+#### 1.6 Reading `summary(lmer())`
+
+```{r}
+summary(m_slope)
+```
+
+Read it in two blocks:
+
+-   **Random effects** (reported as SDs): `id (Intercept)` = how much starting weights vary, `id week` = how much rates vary, `Corr` = their correlation, `Residual` = week-to-week noise around each person's own line.
+-   **Fixed effects**: read like `lm()`. `lmerTest` adds Satterthwaite df and p-values.
+
+**Getting the numbers.** Profile CIs for every parameter (takes a few seconds); `signames = FALSE` gives readable names:
+
+```{r}
+round(confint(m_slope, method = "profile", signames = FALSE), 2)
+```
+
+**Check:** fill in: "People's rates differed with an SD of \_\_\_ kg per week." "The programme group lost \_\_\_ kg per week more than the control group."
+
+#### 1.7 One person's line
+
+P33 is in the programme group. Their line is the group's average line plus their own deviations:
+
+```{r}
+b <- fixef(m_slope)
+u <- ranef(m_slope)$id["P33", ]
+u
+
+p33_start <- (b["(Intercept)"] + b["groupprogramme"]) + u[["(Intercept)"]]   # group start + u0j
+p33_rate  <- (b["week"] + b["week:groupprogramme"]) + u[["week"]]            # group rate + u1j
+c(start = unname(p33_start), rate = unname(p33_rate))
+```
+
+The full model, piece by piece:
+
+`weight_ij = β0 + β1 * week + β2 * programme + β3 * week * programme + u0j + u1j * week + e_ij`
+
+-   fixed part, the question: `week * group`
+-   random part, where the data come from: `(1 + week | id)`
+-   residual, e_ij: added automatically
+
+### C. Why the random part matters
+
+#### 1.8 Same question, four analyses
+
+```{r}
+rbind(
+  way1_lm_all_rows  = confint(m_lm)["week:groupprogramme", ],
+  way2_slopes_ttest = -rev(t.test(rate ~ group, data = per_person, var.equal = TRUE)$conf.int),
+  random_int_only   = c(confint(m_int,   parm = "week:groupprogramme", method = "Wald")),
+  random_int_slope  = c(confint(m_slope, parm = "week:groupprogramme", method = "Wald"))
+)
+```
+
+(`t.test()` subtracts the groups in the other order, so we flip its CI with `-rev()`.)
+
+**Check:** which interval is suspiciously narrow? What does that model assume about everyone's rate?
+
+#### 1.9 Check it yourself: simulate the Type I error rate
+
+If an interval is too narrow, the test rejects too often. Simulate studies in which the programme has **no** effect on the rate, but rates vary between people (as in our data), fit both models, and count how often p \< .05.
+
+```{r}
+#| message: false
+#| warning: false
+sim_once <- function() {
+  d <- expand.grid(week = 0:12, id = 1:48)
+  d$group <- factor(ifelse(d$id <= 24, "control", "programme"))
+  b0 <- rnorm(48, 92, 12)                  # starting weights
+  b1 <- rnorm(48, -0.25, 0.42)             # rates vary (SD 0.42), but NOT by group
+  d$weight_kg <- b0[d$id] + b1[d$id] * d$week + rnorm(nrow(d), 0, 1)
+  m_ri <- lmer(weight_kg ~ week * group + (1 | id), data = d)
+  m_rs <- lmer(weight_kg ~ week * group + (1 + week | id), data = d)
+  c(ri = coef(summary(m_ri))["week:groupprogramme", "Pr(>|t|)"],
+    rs = coef(summary(m_rs))["week:groupprogramme", "Pr(>|t|)"])
+}
+
+set.seed(1)
+p_sim <- replicate(100, suppressMessages(sim_once()))   # 100 studies: about a minute
+rowMeans(p_sim < 0.05)                                  # false-positive rate; should be about 0.05
+```
+
+**Check:** which model keeps the false-positive rate near 5%? (The slides used 300 studies; with 100 the numbers wobble a little.)
+
+### D. Model comparison
+
+#### 1.10 Likelihood-ratio test, AIC and BIC
+
+`anova()` refits both models with ML (maximum likelihood) and runs a likelihood-ratio test. The random-intercept model is **nested** in the random-slope model: it is the same model with the slope SD (and the correlation) fixed at 0.
+
+```{r}
+anova(m_int, m_slope)
+```
+
+AIC and BIC on the ML fits (the same values as in the `anova()` table); lower is better:
+
+```{r}
+m_int_ml   <- update(m_int,   REML = FALSE)
+m_slope_ml <- update(m_slope, REML = FALSE)
+
+AIC(m_int_ml, m_slope_ml)
+BIC(m_int_ml, m_slope_ml)
+```
+
+AICc, the small-sample version, by hand: AICc = AIC + 2k(k + 1) / (n − k − 1).
+
+```{r}
+aicc <- function(m) {
+  k <- attr(logLik(m), "df")   # number of parameters
+  n <- nobs(m)                 # number of rows
+  AIC(m) + 2 * k * (k + 1) / (n - k - 1)
+}
+c(int = aicc(m_int_ml), slope = aicc(m_slope_ml))
+```
+
+**Check:** follow the decision logic from the theory slides: AIC first, then BIC. Do they agree? Is AICc needed here (n / k)?
+
+### E. Degrees of freedom
+
+#### 1.11 Satterthwaite or Kenward–Roger
+
+The estimate of `week:groupprogramme` is the same in all three models, but the df are not:
+
+```{r}
+df_wg <- c(
+  lm             = df.residual(m_lm),
+  random_int     = summary(m_int)$coefficients["week:groupprogramme", "df"],
+  random_slope   = summary(m_slope)$coefficients["week:groupprogramme", "df"],
+  slope_KR       = summary(m_slope, ddf = "Kenward-Roger")$coefficients["week:groupprogramme", "df"]
+)
+round(df_wg, 1)
+```
+
+**Check:** why are the df close to the number of people (48), not the number of rows (481), once the model has random slopes? With 48 people, does it matter whether you use Satterthwaite or Kenward–Roger?
+
+### F. Fixed or random?
+
+#### 1.12 Which random effects does the design allow?
+
+-   **Random intercept for `id`:** yes, everyone has several weigh-ins.
+-   **Random slope for `week`:** yes, `week` varies within each person.
+-   **Random slope for `group`:** no, each person is in only one group.
+
+**Check:** which of `id`, `week`, `group` is the grouping factor? Why could `group` (2 levels) not be a random effect even if it varied within people? (Hint: the 'Which random effects does the design allow?' slide, point 3.)
+
+### G. Post hocs and reporting
+
+#### 1.13 The rate in each group: `emtrends()`
+
+`week:groupprogramme` is the difference in rates. Readers also want each group's own rate. `emtrends()` gives the slope of `week` in each group, and `pairs()` the difference (the post hoc comparison). With more than two groups, `pairs()` would test every pair; adjust the p-values with `adjust = "holm"`.
+
+```{r}
+rates <- emtrends(m_slope, ~ group, var = "week", lmer.df = "satterthwaite")
+summary(rates, infer = TRUE)
+
+summary(pairs(rates, reverse = TRUE), infer = TRUE)   # programme − control
+```
+
+**Check:** is the `pairs()` result the same as the `week:groupprogramme` row of `summary(m_slope)`?
+
+#### 1.14 Write it up
+
+The numbers for the random effects:
+
+```{r}
+VarCorr(m_slope)
+```
+
+Find every number below in your output.
+
+> **Methods.** Weight (kg) was modelled with a linear mixed model, `weight ~ week * group + (1 + week | id)` (reference: control), the maximal random structure the design allows: `week` varies within participants, `group` does not. Models were fitted with REML in R 4.4.0 (lme4 2.0.1, lmerTest 3.2.1), with Satterthwaite degrees of freedom. Post hoc, the rate of change in each group was estimated with `emtrends()` and the groups were compared with `pairs()` (emmeans 2.0.2). The data were 481 weigh-ins from 48 participants; missed weigh-ins were left out, without imputation.
+>
+> **Results.** In the control group weight changed by −0.06 kg per week, 95% CI \[−0.25, 0.12\], p = .49; in the programme group by −0.46 kg per week, 95% CI \[−0.65, −0.28\], p \< .001. The programme group lost 0.40 kg per week more, 95% CI \[−0.66, −0.14\], t(43.4) = −3.06, p = .004. Participants varied in starting weight (SD = 12.5 kg) and in rate (SD = 0.42 kg/week; correlation −0.48); residual SD = 1.44 kg. The model converged without a singular fit.
+
+Avoid: reporting only p, leaving out the random-effects structure, or calling it a repeated-measures ANOVA.
+
+------------------------------------------------------------------------
+
+## Part 2: DataCamp
+
+This week's course:
+
+-   [Hierarchical and Mixed Effects Models in R](https://app.datacamp.com/learn/courses/hierarchical-and-mixed-effects-models-in-r)
+
+------------------------------------------------------------------------
+
+## Part 3: Exercises in RStudio
+
+The exercises use `sleepstudy` from `lme4`: 18 people kept on 3 hours of sleep per night, with reaction time (ms) measured on days 0–9. Question: how much does reaction time increase per day of sleep restriction? There is no group here, so the fixed part is just `Days`.
+
+Write the code yourself in the empty chunk under each exercise. Each exercise has a **goal**, numbered **steps**, and **questions** to answer in a sentence or two below the chunk. Part 1 shows every function you need; if you get stuck, find the matching step in the walkthrough and adapt it to `sleepstudy` (the person variable is `Subject`, time is `Days`, the outcome is `Reaction`). Build the exercises in order: later ones reuse objects from earlier ones.
+
+### Exercise 0 — Explore the data
+
+**Goal:** know the data set before you model it.
+
+**Steps**
+
+1.  Load the data with the line already in the chunk.
+2.  Look at the variables and their types with `glimpse()`.
+3.  Count the participants (`n_distinct(Subject)`) and the rows per participant (`count(Subject)`).
+4.  Check for missing values (`summary()` or `colSums(is.na(...))`).
+5.  Plot the distribution of `Reaction` with `geom_histogram()`.
+6.  Compute the mean `Reaction` for each day (`group_by(Days)` and `summarise()`).
+
+```{r}
+data("sleepstudy", package = "lme4")
+# your code here
+
+```
+
+**Questions:** How many participants and how many rows? Is the design balanced (same number of days for everyone)? Does the average reaction time rise across days, and roughly by how much from day 0 to day 9?
+
+### Exercise 1 — Pre and post
+
+**Goal:** see why two rows per person need a mixed model, using only the first and the last day.
+
+**Steps**
+
+1.  Make a new data frame `sleep_pp` with only day 0 and day 9 (`filter(Days %in% c(0, 9))`).
+2.  Add a variable `time` that is 0 for day 0 and 1 for day 9 (`mutate()` with `ifelse()`).
+3.  Fit `s_pp_lm <- lm(Reaction ~ time, data = sleep_pp)`.
+4.  Fit `s_pp_ri`, the same model with a random intercept for each participant: `lmer()` with `+ (1 | Subject)`.
+5.  Print the 95% CI for `time` from each model: `confint(s_pp_lm)` and `confint(s_pp_ri, method = "Wald")`.
+
+```{r}
+# your code here
+
+```
+
+**Questions:** Are the two estimates for `time` the same? Which CI is narrower, and why? (Think about where the differences between people end up in each model.)
+
+### Exercise 2 — Everyone's line
+
+**Goal:** check, before modelling, whether people slow down at different rates.
+
+**Steps**
+
+1.  Draw a spaghetti plot with `ggplot()`: `Days` on the x-axis, `Reaction` on the y-axis, one line per participant (`aes(group = Subject)` and `geom_line()`).
+2.  Fit a separate straight line for each participant and keep the slope: `group_by(Subject)`, then `reframe(rate = coef(lm(Reaction ~ Days))[2])`. Save the result as `per_subject`.
+3.  Print the smallest and largest slope with `range(per_subject$rate)`.
+
+```{r}
+# your code here
+
+```
+
+**Questions:** Do the lines start at the same height? Are they parallel? What is the range of the per-person slopes, in ms per day?
+
+### Exercise 3 — Random intercepts and random slopes
+
+**Goal:** fit the two mixed models and read their random part.
+
+**Steps**
+
+1.  Fit `s_int`: `Reaction ~ Days` with a random intercept for each participant, `(1 | Subject)`.
+2.  Fit `s_slope`: the same fixed part with random intercepts **and** random slopes for `Days`, `(1 + Days | Subject)`.
+3.  Print the random part of `s_slope` with `VarCorr(s_slope)`.
+
+```{r}
+# your code here
+
+```
+
+**Questions:** What is the SD of the intercepts (how much people differ at day 0, in ms)? What is the SD of the slopes (how much people differ in how fast they slow down, in ms per day)? What is the correlation between the two, and what does its sign mean?
+
+### Exercise 4 — Three CIs side by side
+
+**Goal:** see how the random part changes the uncertainty of the same estimate.
+
+**Steps**
+
+1.  Fit `s_lm <- lm(Reaction ~ Days, data = sleepstudy)`, which ignores who is who.
+2.  Get the 95% CI for `Days` from three models: `confint(s_lm)["Days", ]`, and for `s_int` and `s_slope` use `confint(..., parm = "Days", method = "Wald")`.
+3.  Put the three intervals in one table with `rbind()`, one row per model.
+
+```{r}
+# your code here
+
+```
+
+**Questions:** Is the estimate for `Days` the same in all three models? Which interval is widest and which is narrowest? Which one would you trust, given what you saw in Exercise 2, and why?
+
+### Exercise 5 — Simulation: when do random intercepts suffice?
+
+**Goal:** check whether random slopes still matter when people do **not** differ in their rates.
+
+**Steps**
+
+1.  Copy the function `sim_once()` from walkthrough step 1.9 into the chunk and rename it `sim_same_rate()`.
+2.  In the line that draws the rates, `b1 <- rnorm(48, -0.25, 0.42)`, change the SD from `0.42` to `0`: now everyone has the same rate.
+3.  Set a seed (`set.seed(1)`) and run 200 studies: `p_same <- replicate(200, suppressMessages(sim_same_rate()))`. This takes about two minutes.
+4.  Compute the false-positive rate of each model with `rowMeans(p_same < 0.05)`.
+
+```{r}
+# your code here
+
+```
+
+**Questions:** Is the random-intercept model still too liberal (compare with 5%; with 200 studies, anything between about 2% and 8% is consistent with 5%)? What does this tell you about when random slopes are needed?
+
+### Exercise 6 — Model comparison
+
+**Goal:** decide whether the random slopes are worth their extra parameters.
+
+**Steps**
+
+1.  Compare the two models with a likelihood-ratio test: `anova(s_int, s_slope)`. Note χ², its df and p.
+2.  Refit both models with maximum likelihood, `update(s_int, REML = FALSE)` and `update(s_slope, REML = FALSE)`, and compare them with `AIC()` and `BIC()`.
+
+```{r}
+# your code here
+
+```
+
+**Questions:** How many extra parameters does `s_slope` have, and which are they? Are the random slopes justified by the LRT? Which model has the lower AIC and the lower BIC: do they agree?
+
+### Exercise 7 — Degrees of freedom
+
+**Goal:** see how many degrees of freedom the test of `Days` really has.
+
+**Steps**
+
+1.  Print the fixed-effects table of `s_slope` with `summary(s_slope)$coefficients` and find the df for `Days` (Satterthwaite, the lmerTest default).
+2.  Print it again with Kenward–Roger: `summary(s_slope, ddf = "Kenward-Roger")$coefficients`.
+
+```{r}
+# your code here
+
+```
+
+**Questions:** How do the two df compare with the number of participants (18) and with the number of rows (180)? Why are they so much closer to 18? Which approximation would you report here, and why?
+
+### Exercise 8 — Write it up
+
+**Goal:** report the random-slope model as you would in a paper.
+
+**Steps**
+
+1.  Get the 95% CIs for all parameters with `confint(s_slope, method = "profile")` (round to two decimals with `round(..., 2)`).
+2.  Get the fixed-effects table with `summary(s_slope)$coefficients` (estimate, SE, df, t, p).
+3.  Take the SDs of the random effects and the residual SD from `VarCorr(s_slope)` (Exercise 3).
+4.  Fill in every \_\_\_ in the two paragraphs below: two decimals for estimates and CIs, one for df.
+
+```{r}
+# your code here
+
+```
+
+> **Methods.** Reaction time (ms) was modelled with a linear mixed model, `Reaction ~ Days + (1 + Days | Subject)`, fitted with \_\_\_ and \_\_\_ degrees of freedom. The data were \_\_\_ measurements from \_\_\_ participants.
+>
+> **Results.** Reaction time increased by \_\_\_ ms per day, 95% CI \[\_\_\_, \_\_\_\], t(\_\_\_) = \_\_\_, p \< .001. Participants varied in their day-0 reaction time (SD = \_\_\_ ms) and in their rate of slowing (SD = \_\_\_ ms/day); residual SD = \_\_\_ ms.
+
+------------------------------------------------------------------------
+
+## Extra (optional)
+
+-   **Shrinkage in `sleepstudy`.** Compare each person's own rate (`per_subject$rate`) with their rate from `coef(s_slope)$Subject`. Who moved most? All subjects have 10 days here, so shrinkage depends on how extreme and how noisy each person is.
+-   **Uncorrelated random effects.** Fit `(1 | Subject) + (0 + Days | Subject)` and compare it with `s_slope` using `anova()`. Is it nested in `s_slope`? What did you drop, and does the fit get worse?
+-   **More simulation.** In `sim_once()` from 1.9, reduce the number of people from 48 to 12. What happens to the false-positive rate of the random-slope model, and to its df? Would Kenward–Roger help?
+
+## Where to get help
+
+Ask on the PSY40780 module forum (tag Ondrej or Cameron) any time before the session, or bring questions to the practical — Cameron is there specifically for this.
