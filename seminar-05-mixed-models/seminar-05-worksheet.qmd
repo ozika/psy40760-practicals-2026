@@ -52,7 +52,8 @@ here::i_am(".root-practicals")
 library(renv)
 renv::load(here::here())
 
-renv::install(c("lme4", "lmerTest", "pbkrtest", "emmeans"))
+options(pkgType = "binary")
+renv::install(c("lme4", "lmerTest", "pbkrtest", "emmeans"), type = "binary")
 renv::snapshot()
 ```
 
