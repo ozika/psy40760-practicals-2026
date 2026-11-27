@@ -191,7 +191,9 @@ Plot the data and the fitted line:
 ```{r}
 ggplot(trial_A_data, aes(x = baseline_kg, y = loss_kg)) +
   geom_point() +
-  geom_smooth(method = "lm", se = FALSE, colour = "#C2185B") +
+  geom_abline(intercept=0, slope=0.5, color="blue") +
+  coord_cartesian(ylim = c(0, max(0.5 * trial_A_data$baseline_kg))) +
+  #geom_smooth(method = "lm", se = FALSE, colour = "#C2185B") +
   labs(x = "Starting weight (kg)", y = "Weight lost (kg)")
 ```
 
